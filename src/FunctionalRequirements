@@ -1,12 +1,20 @@
 Main
  - Program Start
- - User input loop
+ - User input loop 2.1
+  - DDL section 3.1
+  - DML section 3.1
+  - DQL section 3.2
  - remove CVS logic? /put into lower level class
 
 Schema
  - Create schema using Table class and write it
+    - create table command 3.1
  - Read in schema/init schema file
- - alter schema?
+    - Show Schema command 3.1
+ - Alter schema
+    - Drop Table command 3.1
+    - Create Index command 3.1
+    - Drop Index command 3.1
 
 Table/Page
  - Add layer to handle dynamic pages?
@@ -15,6 +23,12 @@ Table/Page
     - limit clause?
     - allow for table to have multiple pages
  - Make page insert/indexing logic not dependent on ssn
+ - Insert Into Table command 3.1
+ - Delete From Table command 3.1
+ - Select From Table command 3.2
+ - Where Clause logic 3.2
+
+4.0 ???
 
  Report (will have to wait till after instructions)
 
