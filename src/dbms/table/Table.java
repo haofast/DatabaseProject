@@ -14,6 +14,7 @@ public class Table {
 
     public Table(Column.Builder[] columnBuilders) {
         this.header = new Header(columnBuilders);
+        //TODO logic to have pages dynamic
         this.pages = IntStream.range(0, 10).mapToObj(i -> new Page(this, this.header)).toList();
     }
 
