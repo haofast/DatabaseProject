@@ -10,7 +10,7 @@ import java.util.TreeMap;
 
 public class Page {
 
-    private static final int PAGE_SIZE = 4096;
+    protected static final int PAGE_SIZE = 4096;
 
     private final Table table;
     private final Header header;

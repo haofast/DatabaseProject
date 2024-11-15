@@ -34,8 +34,7 @@ public class Record {
     }
 
     protected int getPageRelativeOffset() {
-        int numRecords = this.page.getRecords().size();
-        return 2 + (numRecords * 2) + (this.getIndexInPage() * header.getRecordSize());
+        return Page.PAGE_SIZE - ((this.getIndexInPage() + 1) * header.getRecordSize());
     }
 
     protected String getPrimaryKeyValue() {
