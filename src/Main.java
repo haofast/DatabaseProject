@@ -9,6 +9,13 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) throws Exception {
 
+
+        //TODO read from Schema Table
+
+        //TODO User input loop
+
+        //TODO close program save functionality?
+
         Column.Builder[] columns = {
             new Column.Builder("Row ID", 4, DataType.INTEGER),
             new Column.Builder("SSN", 9, DataType.STRING).addExtension(ColumnFlag.PRIMARY_KEY),

@@ -35,6 +35,8 @@ public class Page {
     }
 
     protected void write(ExtendedRaf raf) throws IOException {
+        //TODO see how to do this with multiple pages
+
         // clear entire page on disk
         this.zeroOutEntirePage(raf);
 
@@ -64,6 +66,8 @@ public class Page {
     }
 
     protected void read(ExtendedRaf raf) throws IOException {
+        //TODO page logic where if not found in this page looks into the next
+
         // clear all records
         this.records.clear();
 
