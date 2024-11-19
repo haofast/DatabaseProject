@@ -10,16 +10,24 @@ public class Header {
 
     private final List<Column> columns;
 
-    protected Header(Column.Builder[] columnBuilders) {
-        this.columns = Arrays.stream(columnBuilders).map(cb -> cb.build(this)).toList();
+    protected Header(Table table, Column.Builder[] columnBuilders) {
+        this.columns = Arrays.stream(columnBuilders).map(cb -> cb.build(table, this)).toList();
     }
 
-    protected List<Column> getColumns() {
+    public List<Column> getColumns() {
         return new ArrayList<>(this.columns);
     }
 
-    protected Column getPrimaryKeyColumn() {
+    public List<Column> getNonAutoIncrementColumns() {
+        return this.getColumns().stream().filter(c -> !c.hasFlag(ColumnFlag.AUTO_INCREMENT)).toList();
+    }
+
+    public Column getPrimaryKeyColumn() {
         return this.columns.stream().filter(c -> c.hasFlag(ColumnFlag.PRIMARY_KEY)).findFirst().orElse(null);
+    }
+
+    public Column getAutoIncrementColumn() {
+        return this.columns.stream().filter(c -> c.hasFlag(ColumnFlag.AUTO_INCREMENT)).findFirst().orElse(null);
     }
 
     protected int getRecordSize() {
