@@ -14,10 +14,12 @@ public class CLI {
     }
 
     public void startCLI(){
-        while (input.compareTo("Exit;") != 0) {
+        getInput();
+        while (!isExitCommand()) {
             getInput();
             processInput();
         }
+        tearDownDbms();
     }
 
     public void getInput(){
@@ -25,9 +27,17 @@ public class CLI {
         input = ins.nextLine();
     }
 
+    public boolean isExitCommand(){
+        return input.toUpperCase().matches("^\\s*EXIT\\s*[;]");
+    }
+
     public void processInput(){
         List<String> commands = List.of(input.split("/[;]/"));
         Stream<Object> resultMessages = commands.stream().map(commandService::execute);
         resultMessages.forEach(System.out::println);
+    }
+
+    public void tearDownDbms(){
+        System.out.println("Exiting kypton DBMS");
     }
 }
