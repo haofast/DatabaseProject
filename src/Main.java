@@ -4,13 +4,14 @@ import dbms.table.Column;
 import dbms.table.Table;
 import dbms.utilities.CsvRaf;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws Exception {
 
         Column.Builder[] columns = {
-            new Column.Builder("Row ID", 4, DataType.INTEGER),
+            new Column.Builder("Row ID", 4, DataType.INTEGER).addExtension(ColumnFlag.AUTO_INCREMENT),
             new Column.Builder("SSN", 9, DataType.STRING).addExtension(ColumnFlag.PRIMARY_KEY),
             new Column.Builder("First Name", 20, DataType.STRING),
             new Column.Builder("Middle Initial", 1, DataType.STRING),
@@ -53,9 +54,13 @@ public class Main {
         // mutate data into the correct format for the table
         csvFile.forEachLineData((lineData, lineIndex) -> {
             String ssnValue = lineData.remove(indexOfSsn).replaceAll("[^\\d.]", "");
-            lineData.addFirst(Integer.valueOf(lineIndex + 1).toString());
-            lineData.add(1, ssnValue);
-            table.addRecord(lineData);
+            lineData.addFirst(ssnValue);
+
+            try {
+                table.addRecord(lineData);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         });
 
         // close csv file

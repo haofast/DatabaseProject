@@ -1,5 +1,7 @@
 package dbms.table;
 
+import dbms.builders.RecordBuilder;
+import dbms.exceptions.InvalidValueException;
 import dbms.utilities.ExtendedRaf;
 
 import java.io.IOException;
@@ -30,8 +32,10 @@ public class Page {
         return new ArrayList<>(this.records);
     }
 
-    protected void addRecord(List<String> values) {
-        this.records.add(new Record(this, this.header, values));
+    protected void addRecord(RecordBuilder recordBuilder) throws InvalidValueException {
+        Record record = recordBuilder.build(this);
+        this.records.add(record);
+        record.validate();
     }
 
     protected void write(ExtendedRaf raf) throws IOException {
@@ -49,7 +53,7 @@ public class Page {
 
         // sort relative offset of each record by primary key value
         for (Record record : this.records) {
-            keyValueToRelativeOffsetMap.put(record.getPrimaryKeyValue(), record.getPageRelativeOffset());
+            keyValueToRelativeOffsetMap.put(record.getPrimaryKeyCell().getValue(), record.getPageRelativeOffset());
         }
 
         // write relative offsets of each record (sorted by primary key) into header
@@ -75,7 +79,7 @@ public class Page {
 
         // initialize records objects
         for (int i = 0; i < numRecords; i++) {
-            this.records.add(new Record(this, header));
+            this.records.add(new RecordBuilder(header).build(this));
         }
 
         // read data for records from disk
