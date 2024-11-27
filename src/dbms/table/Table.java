@@ -1,5 +1,8 @@
 package dbms.table;
 
+import dbms.builders.RecordBuilder;
+import dbms.exceptions.InvalidValueCountException;
+import dbms.exceptions.InvalidValueException;
 import dbms.utilities.ExtendedRaf;
 
 import java.io.IOException;
@@ -13,7 +16,7 @@ public class Table {
     private final List<Page> pages;
 
     public Table(Column.Builder[] columnBuilders) {
-        this.header = new Header(columnBuilders);
+        this.header = new Header(this, columnBuilders);
         this.pages = IntStream.range(0, 10).mapToObj(i -> new Page(this, this.header)).toList();
     }
 
@@ -25,10 +28,10 @@ public class Table {
         return this.pages.stream().map(Page::getRecords).flatMap(List::stream).toList();
     }
 
-    public void addRecord(List<String> values) {
-        String pkValue = values.get(this.header.getPrimaryKeyColumn().getIndex());
-        int pageIndex = Integer.parseInt(pkValue) % this.pages.size();
-        this.pages.get(pageIndex).addRecord(values);
+    public void addRecord(List<String> values) throws InvalidValueCountException, InvalidValueException {
+        RecordBuilder recordBuilder = new RecordBuilder(this.header, values);
+        Page page = this.pages.get(Integer.parseInt(recordBuilder.getPrimaryKeyValue()) % this.pages.size());
+        page.addRecord(recordBuilder);
     }
 
     public void write(String filePath) throws IOException {
