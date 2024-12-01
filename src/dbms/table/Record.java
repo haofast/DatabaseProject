@@ -51,6 +51,8 @@ public class Record implements IBundleable<Record> {
            exception -> {
                if (exception instanceof InvalidValueException) {
                    System.out.println(exception.getMessage());
+               } else {
+                   throw new RuntimeException(exception);
                }
            }
        );

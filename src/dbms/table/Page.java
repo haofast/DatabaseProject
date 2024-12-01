@@ -55,6 +55,8 @@ public class Page implements IBundleable<Page> {
             exception -> {
                 if (exception instanceof InvalidValueException) {
                     System.out.println(exception.getMessage());
+                } else {
+                    throw new RuntimeException(exception);
                 }
             }
         );
