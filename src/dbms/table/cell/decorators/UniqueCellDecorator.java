@@ -3,8 +3,6 @@ package dbms.table.cell.decorators;
 import dbms.exceptions.InvalidValueException;
 import dbms.table.cell.ICell;
 
-import java.util.List;
-
 public class UniqueCellDecorator extends AbstractCellDecorator {
 
     public UniqueCellDecorator(ICell dataSource) {

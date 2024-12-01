@@ -3,6 +3,7 @@ package dbms.table;
 import dbms.builders.RecordBuilder;
 import dbms.exceptions.InvalidValueException;
 import dbms.utilities.ExtendedRaf;
+import interfaces.IBundleable;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,18 +11,30 @@ import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-public class Page {
+public class Page implements IBundleable<Page> {
 
     protected static final int PAGE_SIZE = 4096;
 
     private final Table table;
     private final Header header;
-    private final List<Record> records;
+    private List<Record> records;
 
     public Page(Table table, Header header) {
         this.table = table;
         this.header = header;
         this.records = new ArrayList<>();
+    }
+
+    @Override
+    public Page getObjectCopy() {
+        Page page = new Page(this.table, this.header);
+        page.records = new ArrayList<>(this.records.stream().map(Record::getObjectCopy).toList());
+        return page;
+    }
+
+    @Override
+    public void setObjectState(Page object) {
+        this.records = object.getRecords();
     }
 
     protected int getAbsoluteOffset() {
@@ -32,10 +45,19 @@ public class Page {
         return new ArrayList<>(this.records);
     }
 
-    protected void addRecord(RecordBuilder recordBuilder) throws InvalidValueException {
-        Record record = recordBuilder.build(this);
-        this.records.add(record);
-        record.validate();
+    protected void addRecord(RecordBuilder recordBuilder) {
+        this.mutateInBundle(
+            bundledPage -> {
+                Record record = recordBuilder.build(this);
+                bundledPage.records.add(record);
+                record.validate();
+            },
+            exception -> {
+                if (exception instanceof InvalidValueException) {
+                    System.out.println(exception.getMessage());
+                }
+            }
+        );
     }
 
     protected void write(ExtendedRaf raf) throws IOException {
