@@ -1,4 +1,4 @@
-package interfaces;
+package dbms.interfaces;
 
 import java.util.function.Consumer;
 

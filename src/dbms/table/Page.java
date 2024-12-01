@@ -3,7 +3,7 @@ package dbms.table;
 import dbms.builders.RecordBuilder;
 import dbms.exceptions.InvalidValueException;
 import dbms.utilities.ExtendedRaf;
-import interfaces.IBundleable;
+import dbms.interfaces.IBundleable;
 
 import java.io.IOException;
 import java.util.ArrayList;

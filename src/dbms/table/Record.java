@@ -5,7 +5,7 @@ import dbms.table.cell.CellFactory;
 import dbms.table.cell.ICell;
 import dbms.builders.RecordBuilder;
 import dbms.utilities.ExtendedRaf;
-import interfaces.IBundleable;
+import dbms.interfaces.IBundleable;
 
 import java.io.IOException;
 import java.util.ArrayList;
