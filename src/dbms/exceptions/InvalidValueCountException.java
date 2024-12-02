@@ -4,7 +4,7 @@ import dbms.table.Header;
 
 import java.util.List;
 
-public class InvalidValueCountException extends Exception {
+public class InvalidValueCountException extends RuntimeException {
     public InvalidValueCountException(Header header, List<String> values) {
         super(new StringBuilder().append("\n")
             .append("Reason: The number of values supplied did not match the number of columns.\n")

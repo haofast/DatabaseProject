@@ -5,17 +5,19 @@ import dbms.table.cell.CellFactory;
 import dbms.table.cell.ICell;
 import dbms.builders.RecordBuilder;
 import dbms.utilities.ExtendedRaf;
+import dbms.interfaces.IBundleable;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.IntStream;
 
-public class Record {
+public class Record implements IBundleable<Record> {
 
-    private final Page page;
-    private final Header header;
-    private final List<ICell> cells;
+    private Page page;
+    private Header header;
+    private List<ICell> cells;
     private boolean markedForDeletion;
 
     public Record(Page page, RecordBuilder builder) {
@@ -27,6 +29,33 @@ public class Record {
     private List<ICell> initializeCells(List<String> values) {
         List<Column> columns = this.header.getColumns();
         return IntStream.range(0, columns.size()).mapToObj(i -> CellFactory.build(this, columns.get(i), values.get(i))).toList();
+    }
+
+    public Record getObjectCopy() {
+        List<String> cellValues = this.cells.stream().map(ICell::getValue).toList();
+        return new Record(this.page, new RecordBuilder(this.header, cellValues));
+    }
+
+    public void setObjectState(Record object) {
+        this.cells = object.getCells();
+    }
+
+    public void setValues(Map<String, String> values) {
+       this.mutateInBundle(
+           bundledRecord -> {
+               for (String key : values.keySet()) {
+                   ICell cell = bundledRecord.getCellWithName(key);
+                   if (cell != null) cell.setValue(values.get(key));
+               }
+           },
+           exception -> {
+               if (exception instanceof InvalidValueException) {
+                   System.out.println(exception.getMessage());
+               } else {
+                   throw new RuntimeException(exception);
+               }
+           }
+       );
     }
 
     private int getIndexInPage() {
@@ -41,12 +70,16 @@ public class Record {
         return Page.PAGE_SIZE - ((this.getIndexInPage() + 1) * header.getRecordSize());
     }
 
-    protected ICell getPrimaryKeyCell() {
+    public ICell getPrimaryKeyCell() {
         return this.cells.get(this.header.getPrimaryKeyColumn().getIndex());
     }
 
     protected List<ICell> getCells() {
         return new ArrayList<>(this.cells);
+    }
+
+    protected ICell getCellWithName(String name) {
+        return this.cells.stream().filter(c -> c.getColumn().getName().equals(name)).findFirst().orElse(null);
     }
 
     protected void validate() throws InvalidValueException {
