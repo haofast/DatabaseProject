@@ -1,3 +1,4 @@
+import dbms.userInterface.CLI;
 import dbms.constants.ColumnFlag;
 import dbms.constants.DataType;
 import dbms.table.Column;
@@ -41,6 +42,8 @@ public class Main {
         System.out.println(">> Output >>");
         System.out.println(table);
         System.out.println();
+
+        CLI userInterface = new CLI();
     }
 
     public static void populateTable(Table table) throws Exception {
