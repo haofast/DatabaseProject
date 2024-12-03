@@ -1,8 +1,8 @@
 package dbms.constants;
 
 public enum ColumnFlag {
+    SYSTEM_MANAGED,
     PRIMARY_KEY,
-    AUTO_INCREMENT,
     UNIQUE,
     NOT_NULL,
 }

@@ -1,5 +1,6 @@
 package dbms.table.cell;
 
+import dbms.exceptions.InvalidValueException;
 import dbms.table.Column;
 import dbms.table.Record;
 import dbms.utilities.ExtendedRaf;
@@ -56,6 +57,11 @@ public abstract class AbstractCell implements ICell {
     public void read(ExtendedRaf raf) throws IOException {
         raf.seek(this.getAbsoluteOffset());
         this.performRead(raf);
+    }
+
+    @Override
+    public void throwInvalidValueException(String message) {
+        throw new InvalidValueException(message, this.value, this.column);
     }
 
     protected abstract void performWrite(ExtendedRaf raf) throws IOException;

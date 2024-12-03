@@ -19,20 +19,18 @@ public class UniqueCellDecorator extends AbstractCellDecorator {
 
     @Override
     public void setValue(String newValue) throws InvalidValueException {
-        validateDuplicateValue(newValue);
+        if (cellExistsWithSameValue(this.getValue())) {
+            this.throwInvalidValueException(this.getDuplicateKeyOnSetMessage());
+        }
         getDataSource().setValue(newValue);
     }
 
     @Override
     public void validate() throws InvalidValueException {
-        validateDuplicateValue(this.getValue());
-        getDataSource().validate();
-    }
-
-    private void validateDuplicateValue(String value) throws InvalidValueException {
-        if (cellExistsWithSameValue(value)) {
-            throw new InvalidValueException(this.getDuplicateKeyOnVerifyMessage(), this.getValue(), this.getColumn());
+        if (cellExistsWithSameValue(this.getValue())) {
+            this.throwInvalidValueException(this.getDuplicateKeyOnVerifyMessage());
         }
+        getDataSource().validate();
     }
 
     private boolean cellExistsWithSameValue(String value) {
