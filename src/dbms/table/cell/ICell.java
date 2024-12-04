@@ -26,6 +26,10 @@ public interface ICell {
         this.getDataSource().validate();
     }
 
+    public default void throwInvalidValueException(String message) {
+        this.getDataSource().throwInvalidValueException(message);
+    }
+
     public default void write(ExtendedRaf raf) throws IOException {
         this.getDataSource().write(raf);
     }

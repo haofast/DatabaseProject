@@ -20,7 +20,7 @@ public class NotNullCellDecorator extends AbstractCellDecorator {
     @Override
     public void validate() throws InvalidValueException {
         if (this.getValue() == null) {
-            throw new InvalidValueException("Value cannot be null", this.getValue(), this.getColumn());
+            throwInvalidValueException("Value cannot be null");
         }
         getDataSource().validate();
     }

@@ -1,7 +1,6 @@
 package dbms.builders;
 
 import dbms.exceptions.InvalidValueCountException;
-import dbms.table.Column;
 import dbms.table.Header;
 import dbms.table.Page;
 import dbms.table.Record;
@@ -26,15 +25,6 @@ public class RecordBuilder {
     }
 
     private List<String> initializeValues(List<String> values) throws InvalidValueCountException {
-        // extract column information
-        Column autoIncrementColumn = this.header.getAutoIncrementColumn();
-        int numNonAutoIncrementColumns = this.header.getNonAutoIncrementColumns().size();
-
-        // check for auto increment column and add value if no auto increment value was supplied
-        if ((autoIncrementColumn != null) && (numNonAutoIncrementColumns == values.size())) {
-            values.add(autoIncrementColumn.getIndex(), String.valueOf(autoIncrementColumn.getLargestValue() + 1));
-        }
-
         // verify that the number of values now matches the number of columns
         if (this.header.getColumns().size() != values.size()) {
             throw new InvalidValueCountException(this.header, values);

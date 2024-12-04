@@ -6,28 +6,26 @@ import dbms.table.cell.AbstractCell;
 import dbms.utilities.ExtendedRaf;
 
 import java.io.IOException;
-import java.util.Arrays;
 
-public class StringCell extends AbstractCell {
-
-    public StringCell(Record record, Column column, String value) {
+public class NullCell extends AbstractCell {
+    public NullCell(Record record, Column column, String value) {
         super(record, column, value);
     }
 
     @Override
     protected void performWrite(ExtendedRaf raf) throws IOException {
-        raf.write(Arrays.copyOf(value.getBytes(), column.getSize()));
+        /* do nothing */
     }
 
     @Override
     protected void performRead(ExtendedRaf raf) throws IOException {
-        this.value = raf.readString(column.getSize());
+        /* do nothing */
     }
 
     @Override
     public void validate() {
-        if (this.value.length() > this.column.getSize()) {
-            this.throwInvalidValueException("Value must not exceed length of " + this.column.getSize());
+        if (this.value != null && !this.value.isEmpty()) {
+            this.throwInvalidValueException("Null type cannot have a non-empty value");
         }
     }
 }

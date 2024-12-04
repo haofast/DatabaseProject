@@ -6,7 +6,6 @@ import dbms.table.cell.AbstractCell;
 import dbms.utilities.ExtendedRaf;
 
 import java.io.IOException;
-import java.lang.String;
 
 public class ShortCell extends AbstractCell {
 
@@ -16,11 +15,20 @@ public class ShortCell extends AbstractCell {
 
     @Override
     protected void performWrite(ExtendedRaf raf) throws IOException {
-        raf.writeShort(java.lang.Short.parseShort(value));
+        raf.writeShort(Short.parseShort(this.value));
     }
 
     @Override
     protected void performRead(ExtendedRaf raf) throws IOException {
         this.value = String.valueOf(raf.readShort());
+    }
+
+    @Override
+    public void validate() {
+        try {
+            Short.parseShort(this.value);
+        } catch (NumberFormatException e) {
+            this.throwInvalidValueException("Value is not a short");
+        }
     }
 }
