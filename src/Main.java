@@ -1,3 +1,4 @@
+import dbms.internalSchema.InternalSchema;
 import dbms.userInterface.CLI;
 import dbms.constants.ColumnFlag;
 import dbms.constants.DataType;
@@ -10,18 +11,23 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws Exception {
+        InternalSchema internalSchema = new InternalSchema();
+        employeeCSVDemo();
+        CLI userInterface = new CLI();
+    }
 
+    public static void employeeCSVDemo() throws Exception {
         Column.Builder[] columns = {
-            new Column.Builder("Row ID", 4, DataType.INTEGER).addExtension(ColumnFlag.AUTO_INCREMENT),
-            new Column.Builder("SSN", 9, DataType.STRING).addExtension(ColumnFlag.PRIMARY_KEY),
-            new Column.Builder("First Name", 20, DataType.STRING),
-            new Column.Builder("Middle Initial", 1, DataType.STRING),
-            new Column.Builder("Last Name", 20, DataType.STRING),
-            new Column.Builder("Birth Date", 10, DataType.STRING),
-            new Column.Builder("Address", 40, DataType.STRING),
-            new Column.Builder("Sex", 1, DataType.STRING),
-            new Column.Builder("Salary", 4, DataType.INTEGER),
-            new Column.Builder("Department Number", 2, DataType.SHORT),
+                new Column.Builder("Row ID", 4, DataType.INTEGER).addExtension(ColumnFlag.AUTO_INCREMENT),
+                new Column.Builder("SSN", 9, DataType.STRING).addExtension(ColumnFlag.PRIMARY_KEY),
+                new Column.Builder("First Name", 20, DataType.STRING),
+                new Column.Builder("Middle Initial", 1, DataType.STRING),
+                new Column.Builder("Last Name", 20, DataType.STRING),
+                new Column.Builder("Birth Date", 10, DataType.STRING),
+                new Column.Builder("Address", 40, DataType.STRING),
+                new Column.Builder("Sex", 1, DataType.STRING),
+                new Column.Builder("Salary", 4, DataType.INTEGER),
+                new Column.Builder("Department Number", 2, DataType.SHORT),
         };
 
         Table table = new Table(columns);
@@ -42,8 +48,6 @@ public class Main {
         System.out.println(">> Output >>");
         System.out.println(table);
         System.out.println();
-
-        CLI userInterface = new CLI();
     }
 
     public static void populateTable(Table table) throws Exception {
