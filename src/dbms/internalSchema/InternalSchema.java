@@ -1,14 +1,11 @@
 package dbms.internalSchema;
 
 public class InternalSchema {
+    KyptonTables kyptonTables = new KyptonTables();
+    KyptonColumns kyptonColumns = new KyptonColumns();
 
-    public KyptonColumns kyptonColumns = new KyptonColumns
-
-    kyptonColumns();
-    public KyptonColumns kyptonColumns = new KyptonColumns
-
-    kyptonColumns();
-    public InternalSchema(){
-
+    public void InternalSchema(){
+        kyptonTables.initializeKyptonTables();
+        kyptonColumns.initializeKyptonColumns();
     }
 }

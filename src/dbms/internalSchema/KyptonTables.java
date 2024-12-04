@@ -1,13 +1,14 @@
 package dbms.internalSchema;
 
 public class KyptonTables {
-    public void kyptonTable(){
 
+    public void KyptonTable(){
+        initializeKyptonTables();
     }
 
     public void initializeKyptonTables() {
         if(!isInternalKyptonTablesInitiaized()){
-
+            createKyptonTables();
         }
     }
 

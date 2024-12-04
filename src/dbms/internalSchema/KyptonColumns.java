@@ -1,10 +1,16 @@
 package dbms.internalSchema;
 
+import java.util.Scanner;
+
 public class KyptonColumns {
+
+    public KyptonColumns(){
+        initializeKyptonColumns();
+    }
 
     public void initializeKyptonColumns() {
         if(!isInternalKyptonColumnsInitiaized()){
-
+            createKyptonColumns();
         }
     }
 
