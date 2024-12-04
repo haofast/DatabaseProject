@@ -6,28 +6,29 @@ import dbms.table.cell.AbstractCell;
 import dbms.utilities.ExtendedRaf;
 
 import java.io.IOException;
-import java.util.Arrays;
 
-public class StringCell extends AbstractCell {
+public class LongCell extends AbstractCell {
 
-    public StringCell(Record record, Column column, String value) {
+    public LongCell(Record record, Column column, String value) {
         super(record, column, value);
     }
 
     @Override
     protected void performWrite(ExtendedRaf raf) throws IOException {
-        raf.write(Arrays.copyOf(value.getBytes(), column.getSize()));
+        raf.writeLong(Long.parseLong(this.value));
     }
 
     @Override
     protected void performRead(ExtendedRaf raf) throws IOException {
-        this.value = raf.readString(column.getSize());
+        this.value = String.valueOf(raf.readLong());
     }
 
     @Override
     public void validate() {
-        if (this.value.length() > this.column.getSize()) {
-            this.throwInvalidValueException("Value must not exceed length of " + this.column.getSize());
+        try {
+            Long.parseLong(this.value);
+        } catch (NumberFormatException e) {
+            this.throwInvalidValueException("Value is not a long");
         }
     }
 }

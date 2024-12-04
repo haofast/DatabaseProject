@@ -1,7 +1,8 @@
 package dbms.table;
 
 import dbms.constants.ColumnFlag;
-import dbms.constants.DataType;
+import dbms.constants.DataTypeCode;
+import dbms.datatypes.AbstractDataType;
 import dbms.table.cell.ICell;
 
 import java.util.HashSet;
@@ -15,16 +16,16 @@ public class Column {
     private final Header          header;
     private final String          name;
     private final int             size;
-    private final DataType        type;
+    private final DataTypeCode    type;
     private final Set<ColumnFlag> flags;
 
     public Column(Table table, Header header, Builder builder) {
-        this.table = table;
+        this.table  = table;
         this.header = header;
-        this.name = builder.name;
-        this.size = builder.size;
-        this.type = builder.type;
-        this.flags = builder.flags;
+        this.name   = builder.name;
+        this.size   = builder.size;
+        this.type   = builder.type;
+        this.flags  = builder.flags;
     }
 
     public int getRelativeRecordOffset() {
@@ -34,10 +35,6 @@ public class Column {
     public List<ICell> getCells() {
         int columnIndex = this.getIndex();
         return this.table.getRecords().stream().map(r -> r.getCells().get(columnIndex)).toList();
-    }
-
-    public int getLargestValue() {
-        return this.getCells().stream().mapToInt(c -> Integer.parseInt(c.getValue())).max().orElse(0);
     }
 
     public int getIndex() {
@@ -52,7 +49,7 @@ public class Column {
         return this.size;
     }
 
-    public DataType getType() {
+    public DataTypeCode getType() {
         return this.type;
     }
 
@@ -67,13 +64,13 @@ public class Column {
     public static class Builder {
         private final String          name;
         private final int             size;
-        private final DataType        type;
+        private final DataTypeCode    type;
         private final Set<ColumnFlag> flags = new HashSet<>();
 
-        public Builder(String name, int size, DataType type) {
+        public Builder(String name, AbstractDataType dataType) {
             this.name = name;
-            this.size = size;
-            this.type = type;
+            this.size = dataType.getSize();
+            this.type = dataType.getCode();
         }
 
         public Builder addExtension(ColumnFlag extension) {

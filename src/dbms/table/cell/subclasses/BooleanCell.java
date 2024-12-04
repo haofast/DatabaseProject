@@ -6,28 +6,29 @@ import dbms.table.cell.AbstractCell;
 import dbms.utilities.ExtendedRaf;
 
 import java.io.IOException;
-import java.util.Arrays;
 
-public class StringCell extends AbstractCell {
+public class BooleanCell extends AbstractCell {
+    private final String TRUE = "true";
+    private final String FALSE = "false";
 
-    public StringCell(Record record, Column column, String value) {
+    public BooleanCell(Record record, Column column, String value) {
         super(record, column, value);
     }
 
     @Override
     protected void performWrite(ExtendedRaf raf) throws IOException {
-        raf.write(Arrays.copyOf(value.getBytes(), column.getSize()));
+        raf.writeByte(this.value.equals(TRUE) ? 1 : 0);
     }
 
     @Override
     protected void performRead(ExtendedRaf raf) throws IOException {
-        this.value = raf.readString(column.getSize());
+        this.value = (raf.readByte() == 0 ? FALSE : TRUE);
     }
 
     @Override
     public void validate() {
-        if (this.value.length() > this.column.getSize()) {
-            this.throwInvalidValueException("Value must not exceed length of " + this.column.getSize());
+        if (!this.value.equals(TRUE) && !this.value.equals(FALSE)) {
+            throwInvalidValueException("Value must either be \"true\" or \"false\"");
         }
     }
 }
