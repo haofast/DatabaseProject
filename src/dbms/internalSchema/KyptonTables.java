@@ -1,7 +1,9 @@
 package dbms.internalSchema;
 
 import dbms.constants.ColumnFlag;
-import dbms.constants.DataType;
+import dbms.datatypes.IntegerType;
+import dbms.datatypes.ShortType;
+import dbms.datatypes.StringType;
 import dbms.table.Column;
 import dbms.table.Table;
 
@@ -11,8 +13,8 @@ import java.util.List;
 
 public class KyptonTables {
     Table kyptonTablesTable;
-    List kyptonTableData = List.of(new String[]{"1", "kypton_tables", "1", "32", "1"});
-    List kyptonColumnData = List.of(new String[]{"1", "kypton_columns", "2", "41", "1"});
+    List kyptonTableData = List.of(new String[]{"kypton_tables", "1", "32", "1"});
+    List kyptonColumnData = List.of(new String[]{"kypton_columns", "2", "41", "1"});
 
     public void KyptonTable() throws IOException {
         initializeKyptonTables();
@@ -31,11 +33,11 @@ public class KyptonTables {
 
     public void createKyptonTables() throws IOException {
         Column.Builder[] columns = {
-                new Column.Builder("rowid", 4, DataType.INTEGER).addExtension(ColumnFlag.PRIMARY_KEY),
-                new Column.Builder("table_name", 20, DataType.STRING),
-                new Column.Builder("record_count", 2, DataType.INTEGER),
-                new Column.Builder("avg_length", 2, DataType.SHORT),
-                new Column.Builder("root_page", 2, DataType.SHORT),
+                new Column.Builder("rowid", new IntegerType()).addExtension(ColumnFlag.PRIMARY_KEY),
+                new Column.Builder("table_name", new StringType(20)),
+                new Column.Builder("record_count", new IntegerType()),
+                new Column.Builder("avg_length", new ShortType()),
+                new Column.Builder("root_page", new ShortType()),
         };
 
         kyptonTablesTable = new Table(columns);

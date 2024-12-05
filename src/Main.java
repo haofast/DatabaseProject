@@ -1,6 +1,9 @@
+import dbms.datatypes.IntegerType;
+import dbms.datatypes.ShortType;
+import dbms.datatypes.StringType;
+import dbms.internalSchema.InternalSchema;
 import dbms.userInterface.CLI;
 import dbms.constants.ColumnFlag;
-import dbms.constants.DataType;
 import dbms.table.Column;
 import dbms.table.Table;
 import dbms.utilities.CsvRaf;
