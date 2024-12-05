@@ -53,6 +53,10 @@ public class KyptonTables {
         }
     }
 
+    public boolean doesTableExist(String tableName) {
+        return true;
+    }
+
     public Table getKyptonTable() {
         return kyptonTablesTable;
     }

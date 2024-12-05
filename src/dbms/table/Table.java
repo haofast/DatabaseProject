@@ -58,7 +58,7 @@ public class Table {
         return sb.toString();
     }
 
-    public Boolean doesTableExist(String filePath) {
+    public boolean doesTableExist(String filePath) {
         boolean tableExists = false;
         try {
             read(filePath);
