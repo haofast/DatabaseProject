@@ -12,26 +12,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class KyptonTables {
-    Table kyptonTablesTable;
-    List kyptonTableData = List.of(new String[]{"kypton_tables", "1", "32", "1"});
-    List kyptonColumnData = List.of(new String[]{"kypton_columns", "2", "41", "1"});
+    static Table kyptonTablesTable;
+    static List kyptonTableData = List.of(new String[]{"kypton_tables", "1", "32", "1"});
+    static List kyptonColumnData = List.of(new String[]{"kypton_columns", "2", "41", "1"});
 
     public void KyptonTable() throws IOException {
         initializeKyptonTables();
     }
 
-    public void initializeKyptonTables() throws IOException {
+    public static void initializeKyptonTables() throws IOException {
         if (!isInternalKyptonTablesInitiaized()) {
             createKyptonTables();
+        } else{
+            kyptonTablesTable.read("kypton_tables.tbl");
         }
     }
 
-    public boolean isInternalKyptonTablesInitiaized() {
+    public static boolean isInternalKyptonTablesInitiaized() {
         //if the internal schema files have been found return true
         return false;
     }
 
-    public void createKyptonTables() throws IOException {
+    public static void createKyptonTables() throws IOException {
         Column.Builder[] columns = {
                 new Column.Builder("rowid", new IntegerType()).addExtension(ColumnFlag.PRIMARY_KEY),
                 new Column.Builder("table_name", new StringType(20)),
