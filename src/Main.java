@@ -13,8 +13,13 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws Exception {
+        //uncomment employeeCSVDemo for milestone 1 example
+        //employeeCSVDemo();
+
         InternalSchema internalSchema = new InternalSchema();
-        employeeCSVDemo();
+        //uncomment printInternalSchema for viewing internal schema at start
+        //internalSchema.printInternalSchema();
+
         CLI userInterface = new CLI();
     }
 
