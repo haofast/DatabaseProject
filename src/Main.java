@@ -1,4 +1,3 @@
-import dbms.internalSchema.InternalSchema;
 import dbms.userInterface.CLI;
 import dbms.constants.ColumnFlag;
 import dbms.constants.DataType;
@@ -18,16 +17,15 @@ public class Main {
 
     public static void employeeCSVDemo() throws Exception {
         Column.Builder[] columns = {
-                new Column.Builder("Row ID", 4, DataType.INTEGER).addExtension(ColumnFlag.AUTO_INCREMENT),
-                new Column.Builder("SSN", 9, DataType.STRING).addExtension(ColumnFlag.PRIMARY_KEY),
-                new Column.Builder("First Name", 20, DataType.STRING),
-                new Column.Builder("Middle Initial", 1, DataType.STRING),
-                new Column.Builder("Last Name", 20, DataType.STRING),
-                new Column.Builder("Birth Date", 10, DataType.STRING),
-                new Column.Builder("Address", 40, DataType.STRING),
-                new Column.Builder("Sex", 1, DataType.STRING),
-                new Column.Builder("Salary", 4, DataType.INTEGER),
-                new Column.Builder("Department Number", 2, DataType.SHORT),
+            new Column.Builder("SSN", new StringType(9)).addExtension(ColumnFlag.PRIMARY_KEY),
+            new Column.Builder("First Name", new StringType(20)),
+            new Column.Builder("Middle Initial", new StringType(1)),
+            new Column.Builder("Last Name", new StringType(20)),
+            new Column.Builder("Birth Date", new StringType(10)),
+            new Column.Builder("Address", new StringType(40)),
+            new Column.Builder("Sex", new StringType(1)),
+            new Column.Builder("Salary", new IntegerType()),
+            new Column.Builder("Department Number", new ShortType()),
         };
 
         Table table = new Table(columns);
@@ -62,12 +60,7 @@ public class Main {
         csvFile.forEachLineData((lineData, lineIndex) -> {
             String ssnValue = lineData.remove(indexOfSsn).replaceAll("[^\\d.]", "");
             lineData.addFirst(ssnValue);
-
-            try {
-                table.addRecord(lineData);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+            table.addRecord(lineData);
         });
 
         // close csv file

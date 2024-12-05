@@ -6,7 +6,6 @@ import dbms.table.cell.AbstractCell;
 import dbms.utilities.ExtendedRaf;
 
 import java.io.IOException;
-import java.lang.String;
 
 public class IntegerCell extends AbstractCell {
 
@@ -16,11 +15,20 @@ public class IntegerCell extends AbstractCell {
 
     @Override
     protected void performWrite(ExtendedRaf raf) throws IOException {
-        raf.writeInt(Integer.parseInt(this.getValue()));
+        raf.writeInt(Integer.parseInt(this.value));
     }
 
     @Override
     protected void performRead(ExtendedRaf raf) throws IOException {
         this.value = String.valueOf(raf.readInt());
+    }
+
+    @Override
+    public void validate() {
+        try {
+            Integer.parseInt(this.value);
+        } catch (NumberFormatException e) {
+            this.throwInvalidValueException("Value is not an integer");
+        }
     }
 }

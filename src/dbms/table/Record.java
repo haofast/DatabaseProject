@@ -15,10 +15,9 @@ import java.util.stream.IntStream;
 
 public class Record implements IBundleable<Record> {
 
-    private Page page;
-    private Header header;
+    private final Page page;
+    private final Header header;
     private List<ICell> cells;
-    private boolean markedForDeletion;
 
     public Record(Page page, RecordBuilder builder) {
         this.page = page;
@@ -31,17 +30,19 @@ public class Record implements IBundleable<Record> {
         return IntStream.range(0, columns.size()).mapToObj(i -> CellFactory.build(this, columns.get(i), values.get(i))).toList();
     }
 
+    @Override
     public Record getObjectCopy() {
         List<String> cellValues = this.cells.stream().map(ICell::getValue).toList();
         return new Record(this.page, new RecordBuilder(this.header, cellValues));
     }
 
+    @Override
     public void setObjectState(Record object) {
         this.cells = object.getCells();
     }
 
-    public void setValues(Map<String, String> values) {
-       this.mutateInBundle(
+    public boolean setValues(Map<String, String> values) {
+       return this.mutateInBundle(
            bundledRecord -> {
                for (String key : values.keySet()) {
                    ICell cell = bundledRecord.getCellWithName(key);
@@ -89,18 +90,14 @@ public class Record implements IBundleable<Record> {
     protected void write(ExtendedRaf raf) throws IOException {
         raf.seek(this.getAbsoluteOffset());
         for (ICell cell: this.cells) { cell.write(raf); }
-        raf.writeByte(this.markedForDeletion ? 1 : 0);
     }
 
     protected void read(ExtendedRaf raf) throws IOException {
         raf.seek(this.getAbsoluteOffset());
         for (ICell cell: this.cells) { cell.read(raf); }
-        this.markedForDeletion = raf.readByte() != 0;
     }
 
     public String toString() {
-        List<String> values = new ArrayList<>(this.cells.stream().map(ICell::getValue).toList());
-        values.add(this.markedForDeletion ? "deleted" : "not deleted");
-        return values.toString();
+        return new ArrayList<>(this.cells.stream().map(ICell::getValue).toList()).toString();
     }
 }

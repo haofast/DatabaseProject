@@ -6,28 +6,29 @@ import dbms.table.cell.AbstractCell;
 import dbms.utilities.ExtendedRaf;
 
 import java.io.IOException;
-import java.util.Arrays;
 
-public class StringCell extends AbstractCell {
+public class FloatCell extends AbstractCell {
 
-    public StringCell(Record record, Column column, String value) {
+    public FloatCell(Record record, Column column, String value) {
         super(record, column, value);
     }
 
     @Override
     protected void performWrite(ExtendedRaf raf) throws IOException {
-        raf.write(Arrays.copyOf(value.getBytes(), column.getSize()));
+        raf.writeFloat(Float.parseFloat(this.value));
     }
 
     @Override
     protected void performRead(ExtendedRaf raf) throws IOException {
-        this.value = raf.readString(column.getSize());
+        this.value = String.valueOf(raf.readFloat());
     }
 
     @Override
     public void validate() {
-        if (this.value.length() > this.column.getSize()) {
-            this.throwInvalidValueException("Value must not exceed length of " + this.column.getSize());
+        try {
+            Float.parseFloat(this.value);
+        } catch (NumberFormatException e) {
+            this.throwInvalidValueException("Value is not a float");
         }
     }
 }

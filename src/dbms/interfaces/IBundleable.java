@@ -9,8 +9,8 @@ public interface IBundleable<T> {
     /* sets the state of an object */
     public void setObjectState(T object);
 
-    /* runs an operation on the object */
-    public default void mutateInBundle(
+    /* runs an operation on the object, returns true if successful */
+    public default boolean mutateInBundle(
         Consumer<T> mutateBundle,
         Consumer<Exception> handleError
     ) {
@@ -19,10 +19,12 @@ public interface IBundleable<T> {
             T bundledObject = getObjectCopy();
             mutateBundle.accept(bundledObject);
             setObjectState(bundledObject);
+            return true;
 
         } catch (Exception e) {
             // run function to handle errors
             handleError.accept(e);
+            return false;
         }
     }
 }

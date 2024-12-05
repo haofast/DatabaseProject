@@ -45,8 +45,8 @@ public class Page implements IBundleable<Page> {
         return new ArrayList<>(this.records);
     }
 
-    protected void addRecord(RecordBuilder recordBuilder) {
-        this.mutateInBundle(
+    protected boolean addRecord(RecordBuilder recordBuilder) {
+        return this.mutateInBundle(
             bundledPage -> {
                 Record record = recordBuilder.build(this);
                 bundledPage.records.add(record);
@@ -63,25 +63,36 @@ public class Page implements IBundleable<Page> {
     }
 
     protected void write(ExtendedRaf raf) throws IOException {
+        int absoluteOffset = this.getAbsoluteOffset();
+
         // clear entire page on disk
         this.zeroOutEntirePage(raf);
 
         // move to start of page on disk
-        raf.seek(this.getAbsoluteOffset());
+        raf.seek(absoluteOffset);
 
         // write number of records into header
+        raf.seek(absoluteOffset + 2);
         raf.writeShort(records.size());
 
-        // store primary key value to relative offset mapping
-        SortedMap<String, Integer> keyValueToRelativeOffsetMap = new TreeMap<>();
+        // @todo write offset of the start of cell content area
+        raf.seek(absoluteOffset + 4);
 
-        // sort relative offset of each record by primary key value
-        for (Record record : this.records) {
-            keyValueToRelativeOffsetMap.put(record.getPrimaryKeyCell().getValue(), record.getPageRelativeOffset());
-        }
+        // @todo write pointer that points to the root page of file
+        raf.seek(absoluteOffset + 10);
+
+        // @todo write pointer that points to parent page of this page
+        raf.seek(absoluteOffset + 12);
+
+        // @todo write pointer that for:
+        //   INTERIOR PAGE           - the page number of the rightmost child
+        //   NON-RIGHTMOST LEAF PAGE - the page number of the sibling to the right
+        //   RIGHTMOST LEAF PAGE     - the special value of 0xFFFF
+        raf.seek(absoluteOffset + 14);
 
         // write relative offsets of each record (sorted by primary key) into header
-        for (int relativeOffset : keyValueToRelativeOffsetMap.values()) {
+        raf.seek(absoluteOffset + 16);
+        for (int relativeOffset : this.getRecordOffsetsSortedByKeyValue().values()) {
             raf.writeShort(relativeOffset);
         }
 
@@ -92,14 +103,32 @@ public class Page implements IBundleable<Page> {
     }
 
     protected void read(ExtendedRaf raf) throws IOException {
+        int absoluteOffset = this.getAbsoluteOffset();
+
         // clear all records
         this.records.clear();
 
         // move to start of page on disk
-        raf.seek(this.getAbsoluteOffset());
+        raf.seek(absoluteOffset);
 
         // read number of records from header
+        raf.seek(absoluteOffset + 2);
         int numRecords = raf.readShort();
+
+        // @todo read offset of the start of cell content area
+        raf.seek(absoluteOffset + 4);
+
+        // @todo read pointer that points to the root page of file
+        raf.seek(absoluteOffset + 10);
+
+        // @todo read pointer that points to parent page of this page
+        raf.seek(absoluteOffset + 12);
+
+        // @todo read pointer that for:
+        //   INTERIOR PAGE           - the page number of the rightmost child
+        //   NON-RIGHTMOST LEAF PAGE - the page number of the sibling to the right
+        //   RIGHTMOST LEAF PAGE     - the special value of 0xFFFF
+        raf.seek(absoluteOffset + 14);
 
         // initialize records objects
         for (int i = 0; i < numRecords; i++) {
@@ -110,6 +139,19 @@ public class Page implements IBundleable<Page> {
         for (Record record : this.records) {
             record.read(raf);
         }
+    }
+
+    private SortedMap<String, Integer> getRecordOffsetsSortedByKeyValue() {
+        // store primary key value to relative offset mapping
+        SortedMap<String, Integer> keyValueToRelativeOffsetMap = new TreeMap<>();
+
+        // sort relative offset of each record by primary key value
+        for (Record record : this.records) {
+            keyValueToRelativeOffsetMap.put(record.getPrimaryKeyCell().getValue(), record.getPageRelativeOffset());
+        }
+
+        // return map of <key_value, relative_offset>
+        return keyValueToRelativeOffsetMap;
     }
 
     private void zeroOutEntirePage(ExtendedRaf raf) throws IOException {

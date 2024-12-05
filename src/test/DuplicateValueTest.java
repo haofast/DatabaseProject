@@ -1,7 +1,7 @@
 package test;
 
 import dbms.constants.ColumnFlag;
-import dbms.constants.DataType;
+import dbms.datatypes.StringType;
 import dbms.table.Column;
 import dbms.table.Table;
 import dbms.table.Record;
@@ -16,10 +16,10 @@ public class DuplicateValueTest {
      */
     public static void main(String[] args) {
         Column.Builder[] columns = {
-                new Column.Builder("SSN", 9, DataType.STRING).addExtension(ColumnFlag.PRIMARY_KEY),
-                new Column.Builder("First Name", 20, DataType.STRING),
-                new Column.Builder("Middle Initial", 1, DataType.STRING),
-                new Column.Builder("Last Name", 20, DataType.STRING),
+                new Column.Builder("SSN", new StringType(9)).addExtension(ColumnFlag.PRIMARY_KEY),
+                new Column.Builder("First Name", new StringType(20)),
+                new Column.Builder("Middle Initial", new StringType(1)),
+                new Column.Builder("Last Name", new StringType(20)),
         };
 
         Table table = new Table(columns);
