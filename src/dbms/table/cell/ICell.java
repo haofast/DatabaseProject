@@ -6,7 +6,7 @@ import dbms.utilities.ExtendedRaf;
 
 import java.io.IOException;
 
-public interface ICell {
+public interface ICell extends Comparable<ICell> {
 
     public ICell getDataSource();
 
@@ -36,5 +36,10 @@ public interface ICell {
 
     public default void read(ExtendedRaf raf) throws IOException {
         this.getDataSource().read(raf);
+    }
+
+    @Override
+    public default int compareTo(ICell o) {
+        return this.getDataSource().compareTo(o);
     }
 }

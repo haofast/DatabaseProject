@@ -3,10 +3,7 @@ package dbms.table.cell.subclasses;
 import dbms.table.Column;
 import dbms.table.Record;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.TimeZone;
 
 public class DateCell extends DateTimeCell {
 
@@ -15,10 +12,8 @@ public class DateCell extends DateTimeCell {
     }
 
     @Override
-    protected DateFormat getDateFormat() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-        return dateFormat;
+    protected String getDateFormatString() {
+        return "yyyy-MM-dd";
     }
 
     @Override

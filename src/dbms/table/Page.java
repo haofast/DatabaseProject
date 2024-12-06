@@ -41,6 +41,10 @@ public class Page implements IBundleable<Page> {
         return this.table.getPages().indexOf(this) * PAGE_SIZE;
     }
 
+    protected Record getRecordByRowID(int rowID) {
+        return this.records.stream().filter(r -> r.getCellByIndex(0).getValue().equals(String.valueOf(rowID))).findFirst().orElse(null);
+    }
+
     protected List<Record> getRecords() {
         return new ArrayList<>(this.records);
     }

@@ -3,6 +3,7 @@ package dbms.table.cell.subclasses;
 import dbms.table.Column;
 import dbms.table.Record;
 import dbms.table.cell.AbstractCell;
+import dbms.table.cell.ICell;
 import dbms.utilities.ExtendedRaf;
 
 import java.io.IOException;
@@ -13,9 +14,13 @@ public class IntegerCell extends AbstractCell {
         super(record, column, value);
     }
 
+    public int getIntegerValue() {
+        return Integer.parseInt(this.value);
+    }
+
     @Override
     protected void performWrite(ExtendedRaf raf) throws IOException {
-        raf.writeInt(Integer.parseInt(this.value));
+        raf.writeInt(this.getIntegerValue());
     }
 
     @Override
@@ -30,5 +35,11 @@ public class IntegerCell extends AbstractCell {
         } catch (NumberFormatException e) {
             this.throwInvalidValueException("Value is not an integer");
         }
+    }
+
+    @Override
+    public int compareTo(ICell o) {
+        IntegerCell cell = (IntegerCell) o.getDataSource();
+        return Integer.compare(this.getIntegerValue(), cell.getIntegerValue());
     }
 }

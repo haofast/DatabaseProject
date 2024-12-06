@@ -44,6 +44,10 @@ public class Header {
         return new ArrayList<>(this.columns);
     }
 
+    public Column getColumnByName(String columnName) {
+        return this.columns.stream().filter(c -> c.getName().equals(columnName)).findFirst().orElse(null);
+    }
+
     public Column getPrimaryKeyColumn() {
         return this.columns.stream().filter(c -> c.hasFlag(ColumnFlag.PRIMARY_KEY)).findFirst().orElse(null);
     }

@@ -3,6 +3,7 @@ package dbms.table.cell.subclasses;
 import dbms.table.Column;
 import dbms.table.Record;
 import dbms.table.cell.AbstractCell;
+import dbms.table.cell.ICell;
 import dbms.utilities.ExtendedRaf;
 
 import java.io.IOException;
@@ -29,5 +30,11 @@ public class StringCell extends AbstractCell {
         if (this.value.length() > this.column.getSize()) {
             this.throwInvalidValueException("Value must not exceed length of " + this.column.getSize());
         }
+    }
+
+    @Override
+    public int compareTo(ICell o) {
+        StringCell cell = (StringCell) o.getDataSource();
+        return this.value.compareTo(cell.getValue());
     }
 }
