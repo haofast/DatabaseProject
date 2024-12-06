@@ -57,4 +57,17 @@ public class Table {
         this.getRecords().forEach(r -> sb.append('\n').append(r));
         return sb.toString();
     }
+
+    public boolean doesTableExist(String filePath) {
+        boolean tableExists = false;
+        try {
+            read(filePath);
+            tableExists = true;
+        }
+        catch (Exception e){
+            tableExists = false;
+        }
+
+        return tableExists;
+    }
 }
