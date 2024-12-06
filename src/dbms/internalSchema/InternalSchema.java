@@ -9,6 +9,9 @@ public class InternalSchema {
     public InternalSchema() throws IOException {
         kyptonTables.initializeKyptonTables();
         kyptonColumns.initializeKyptonColumns();
+    }
+
+    public void printInternalSchema(){
         System.out.println(">> Internal Schema Initialized >>");
         System.out.println();
 
