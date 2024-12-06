@@ -7,7 +7,6 @@ import dbms.datatypes.IntegerType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 public class Header {
 
@@ -39,8 +38,6 @@ public class Header {
         // add reserved columns
         this.columns.addFirst(rowIDColumnBuilder.build(table, this));
         this.columns.addLast(deletedColumnBuilder.build(table, this));
-
-        // set map of columns by name
     }
 
     public List<Column> getColumns() {
