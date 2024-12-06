@@ -6,7 +6,7 @@ import dbms.utilities.btree.BTreeKey;
 public class BTreeInsertionTest {
     /*
      * Description: should insert all values in the B-tree successfully
-     * Expected behavior: prints [[ 5 | Hello ], [ 6 | my ], [ 6 | name ], [ 10 | is ], [ 12 | Peter ], [ 20 | L. ], [ 30 | Griffin ]]
+     * Expected behavior: prints all keys in ascending order
      */
     public static void main(String[] args) {
         BTree<Integer, String> tree = new BTree<>();
