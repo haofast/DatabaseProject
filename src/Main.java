@@ -7,6 +7,8 @@ import dbms.constants.ColumnFlag;
 import dbms.table.Column;
 import dbms.table.Table;
 import dbms.utilities.CsvRaf;
+import dbms.ddlCommands.*;
+import dbms.dmlAndDqlCommands.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +51,15 @@ public class Main {
         System.out.println(">> Output >>");
         System.out.println(table);
         System.out.println();
+    }
+
+  public static void queryTest() throws Exception {
+        TableCommands tc = new TableCommands("DROP TABLE table_name;");
+        IndexCommands ic = new IndexCommands("DROP INDEX index_name;");
+        Delete d = new Delete("DELETE FROM table_name WHERE val=69;");
+        Insert i = new Insert("INSERT INTO TABLE table_name VALUES (value1, value2, value3);");
+        Select s = new Select("SELECT * FROM table_name WHERE column_name1>value1 AND column_name2>=value2;");
+        Update u = new Update("UPDATE table_name SET column_name=value WHERE condition;");
     }
 
     public static void populateTable(Table table) throws Exception {
