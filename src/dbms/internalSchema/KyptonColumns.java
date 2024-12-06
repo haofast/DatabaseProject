@@ -67,6 +67,14 @@ public class KyptonColumns {
         }
     }
 
+    public boolean doesColumnExist(String columnName){
+        return true;
+    }
+
+    public boolean doesTableHaveColumn(int tableRowId, String columnName){
+        return true;
+    }
+
     public Table getKyptonColumnTable() {
         return kyptonColumnTable;
     }
