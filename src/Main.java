@@ -1,17 +1,24 @@
-import dbms.userInterface.CLI;
-import dbms.constants.ColumnFlag;
 import dbms.datatypes.IntegerType;
 import dbms.datatypes.ShortType;
 import dbms.datatypes.StringType;
+import dbms.internalSchema.InternalSchema;
+import dbms.userInterface.CLI;
+import dbms.constants.ColumnFlag;
 import dbms.table.Column;
 import dbms.table.Table;
 import dbms.utilities.CsvRaf;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws Exception {
+        InternalSchema internalSchema = new InternalSchema();
+        employeeCSVDemo();
+        CLI userInterface = new CLI();
+    }
 
+    public static void employeeCSVDemo() throws Exception {
         Column.Builder[] columns = {
             new Column.Builder("SSN", new StringType(9)).addExtension(ColumnFlag.PRIMARY_KEY),
             new Column.Builder("First Name", new StringType(20)),
@@ -42,8 +49,6 @@ public class Main {
         System.out.println(">> Output >>");
         System.out.println(table);
         System.out.println();
-
-        CLI userInterface = new CLI();
     }
 
     public static void populateTable(Table table) throws Exception {
