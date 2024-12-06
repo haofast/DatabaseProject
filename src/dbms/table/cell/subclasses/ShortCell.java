@@ -3,6 +3,7 @@ package dbms.table.cell.subclasses;
 import dbms.table.Column;
 import dbms.table.Record;
 import dbms.table.cell.AbstractCell;
+import dbms.table.cell.ICell;
 import dbms.utilities.ExtendedRaf;
 
 import java.io.IOException;
@@ -13,9 +14,13 @@ public class ShortCell extends AbstractCell {
         super(record, column, value);
     }
 
+    public short getShortValue() {
+        return Short.parseShort(this.value);
+    }
+
     @Override
     protected void performWrite(ExtendedRaf raf) throws IOException {
-        raf.writeShort(Short.parseShort(this.value));
+        raf.writeShort(this.getShortValue());
     }
 
     @Override
@@ -30,5 +35,11 @@ public class ShortCell extends AbstractCell {
         } catch (NumberFormatException e) {
             this.throwInvalidValueException("Value is not a short");
         }
+    }
+
+    @Override
+    public int compareTo(ICell o) {
+        ShortCell cell = (ShortCell) o.getDataSource();
+        return Short.compare(this.getShortValue(), cell.getShortValue());
     }
 }

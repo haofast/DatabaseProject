@@ -83,6 +83,10 @@ public class Record implements IBundleable<Record> {
         return this.cells.stream().filter(c -> c.getColumn().getName().equals(name)).findFirst().orElse(null);
     }
 
+    protected ICell getCellByIndex(int index) {
+        return this.cells.get(index);
+    }
+
     protected void validate() throws InvalidValueException {
         for (ICell cell : this.cells) { cell.validate(); }
     }

@@ -3,6 +3,7 @@ package dbms.table.cell.subclasses;
 import dbms.table.Column;
 import dbms.table.Record;
 import dbms.table.cell.AbstractCell;
+import dbms.table.cell.ICell;
 import dbms.utilities.ExtendedRaf;
 
 import java.io.IOException;
@@ -13,9 +14,13 @@ public class DoubleCell extends AbstractCell {
         super(record, column, value);
     }
 
+    public double getDoubleValue() {
+        return Double.parseDouble(this.value);
+    }
+
     @Override
     protected void performWrite(ExtendedRaf raf) throws IOException {
-        raf.writeDouble(Double.parseDouble(this.value));
+        raf.writeDouble(this.getDoubleValue());
     }
 
     @Override
@@ -30,5 +35,11 @@ public class DoubleCell extends AbstractCell {
         } catch (NumberFormatException e) {
             this.throwInvalidValueException("Value is not a double");
         }
+    }
+
+    @Override
+    public int compareTo(ICell o) {
+        DoubleCell cell = (DoubleCell) o.getDataSource();
+        return Double.compare(this.getDoubleValue(), cell.getDoubleValue());
     }
 }

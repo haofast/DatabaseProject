@@ -10,6 +10,7 @@ import dbms.table.cell.decorators.UniqueCellDecorator;
 import dbms.table.cell.subclasses.*;
 
 public class CellFactory {
+
     public static ICell build(Record record, Column column, String value) {
         ICell cell = switch(column.getType()) {
             case DataTypeCode.NULL     -> new NullCell(record, column, value);

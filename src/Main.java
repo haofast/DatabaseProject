@@ -1,14 +1,14 @@
+import dbms.userInterface.CLI;
+import dbms.constants.ColumnFlag;
 import dbms.datatypes.IntegerType;
 import dbms.datatypes.ShortType;
 import dbms.datatypes.StringType;
 import dbms.internalSchema.InternalSchema;
-import dbms.userInterface.CLI;
-import dbms.constants.ColumnFlag;
 import dbms.table.Column;
+import dbms.table.Record;
 import dbms.table.Table;
 import dbms.utilities.CsvRaf;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
@@ -49,6 +49,13 @@ public class Main {
         System.out.println(">> Output >>");
         System.out.println(table);
         System.out.println();
+
+        System.out.println(">> Records with Salary == 35000 >>");
+        table.createIndex("test_index", "Salary");
+        List<Record> searchResults = table.searchRecordsByValue("Salary", "35000");
+        searchResults.forEach(System.out::println);
+
+        CLI userInterface = new CLI();
     }
 
     public static void populateTable(Table table) throws Exception {

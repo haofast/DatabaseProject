@@ -12,11 +12,13 @@ public class Table {
 
     private int nextFreeRowID;
     private final Header header;
+    private final Indexer indexer;
     private final List<Page> pages;
 
     public Table(Column.Builder[] columnBuilders) {
         this.nextFreeRowID = 1;
         this.header = new Header(this, columnBuilders);
+        this.indexer = new Indexer(this, this.header);
         this.pages = IntStream.range(0, 10).mapToObj(i -> new Page(this, this.header)).toList();
     }
 
@@ -37,7 +39,19 @@ public class Table {
         // construct record and insert it into page
         RecordBuilder recordBuilder = new RecordBuilder(this.header, values);
         Page page = this.pages.get(Integer.parseInt(recordBuilder.getPrimaryKeyValue()) % this.pages.size());
-        if (page.addRecord(recordBuilder)) nextFreeRowID++;
+
+        if (page.addRecord(recordBuilder)) {
+            this.indexer.updateIndices(page.getRecordByRowID(nextFreeRowID));
+            nextFreeRowID++;
+        }
+    }
+
+    public void createIndex(String indexName, String columnName) {
+        this.indexer.createIndex(indexName, columnName);
+    }
+
+    public List<Record> searchRecordsByValue(String columnName, String searchKeyValue) {
+        return this.indexer.searchRecordsByValue(columnName, searchKeyValue);
     }
 
     public void write(String filePath) throws IOException {

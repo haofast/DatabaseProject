@@ -3,6 +3,7 @@ package dbms.table.cell.subclasses;
 import dbms.table.Column;
 import dbms.table.Record;
 import dbms.table.cell.AbstractCell;
+import dbms.table.cell.ICell;
 import dbms.utilities.ExtendedRaf;
 
 import java.io.IOException;
@@ -18,21 +19,29 @@ public class DateTimeCell extends AbstractCell {
         super(record, column, value);
     }
 
+    public Date getDateValue() {
+        try {
+            return this.getDateFormat().parse(this.value);
+        } catch(ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    protected String getDateFormatString() {
+        return "yyyy-MM-dd_HH:mm:ss";
+    }
+
     protected DateFormat getDateFormat() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat(this.getDateFormatString());
         dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         return dateFormat;
     }
 
     @Override
     protected void performWrite(ExtendedRaf raf) throws IOException {
-        try {
-            Date date = this.getDateFormat().parse(this.value);
-            long epochTimeInSeconds = date.getTime() / 1000;
-            raf.writeLong(epochTimeInSeconds);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
+        Date date = this.getDateValue();
+        long epochTimeInSeconds = date.getTime() / 1000;
+        raf.writeLong(epochTimeInSeconds);
     }
 
     @Override
@@ -49,5 +58,11 @@ public class DateTimeCell extends AbstractCell {
         } catch (ParseException e) {
             this.throwInvalidValueException("Value must be in the format yyyy-MM-dd_HH:mm:ss");
         }
+    }
+
+    @Override
+    public int compareTo(ICell o) {
+        DateTimeCell cell = (DateTimeCell) o.getDataSource();
+        return Long.compare(this.getDateValue().getTime(), cell.getDateValue().getTime());
     }
 }

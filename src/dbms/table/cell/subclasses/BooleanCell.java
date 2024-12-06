@@ -3,11 +3,13 @@ package dbms.table.cell.subclasses;
 import dbms.table.Column;
 import dbms.table.Record;
 import dbms.table.cell.AbstractCell;
+import dbms.table.cell.ICell;
 import dbms.utilities.ExtendedRaf;
 
 import java.io.IOException;
 
 public class BooleanCell extends AbstractCell {
+
     private final String TRUE = "true";
     private final String FALSE = "false";
 
@@ -15,9 +17,13 @@ public class BooleanCell extends AbstractCell {
         super(record, column, value);
     }
 
+    public boolean getBooleanValue() {
+        return this.value.equals(TRUE);
+    }
+
     @Override
     protected void performWrite(ExtendedRaf raf) throws IOException {
-        raf.writeByte(this.value.equals(TRUE) ? 1 : 0);
+        raf.writeByte(getBooleanValue() ? 1 : 0);
     }
 
     @Override
@@ -30,5 +36,11 @@ public class BooleanCell extends AbstractCell {
         if (!this.value.equals(TRUE) && !this.value.equals(FALSE)) {
             throwInvalidValueException("Value must either be \"true\" or \"false\"");
         }
+    }
+
+    @Override
+    public int compareTo(ICell o) {
+        BooleanCell cell = (BooleanCell) o.getDataSource();
+        return Boolean.compare(this.getBooleanValue(), cell.getBooleanValue());
     }
 }

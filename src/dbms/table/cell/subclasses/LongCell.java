@@ -3,6 +3,7 @@ package dbms.table.cell.subclasses;
 import dbms.table.Column;
 import dbms.table.Record;
 import dbms.table.cell.AbstractCell;
+import dbms.table.cell.ICell;
 import dbms.utilities.ExtendedRaf;
 
 import java.io.IOException;
@@ -13,9 +14,13 @@ public class LongCell extends AbstractCell {
         super(record, column, value);
     }
 
+    public long getLongValue() {
+        return Long.parseLong(this.value);
+    }
+
     @Override
     protected void performWrite(ExtendedRaf raf) throws IOException {
-        raf.writeLong(Long.parseLong(this.value));
+        raf.writeLong(this.getLongValue());
     }
 
     @Override
@@ -30,5 +35,11 @@ public class LongCell extends AbstractCell {
         } catch (NumberFormatException e) {
             this.throwInvalidValueException("Value is not a long");
         }
+    }
+
+    @Override
+    public int compareTo(ICell o) {
+        LongCell cell = (LongCell) o.getDataSource();
+        return Long.compare(this.getLongValue(), cell.getLongValue());
     }
 }
