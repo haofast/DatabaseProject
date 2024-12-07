@@ -19,6 +19,11 @@ public class LongCell extends AbstractCell {
     }
 
     @Override
+    public int getDataTypeCode() {
+        return 4;
+    }
+
+    @Override
     protected void performWrite(ExtendedRaf raf) throws IOException {
         raf.writeLong(this.getLongValue());
     }

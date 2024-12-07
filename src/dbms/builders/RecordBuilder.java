@@ -2,7 +2,7 @@ package dbms.builders;
 
 import dbms.exceptions.InvalidValueCountException;
 import dbms.table.Header;
-import dbms.table.Page;
+import dbms.table.page.LeafPage;
 import dbms.table.Record;
 
 import java.util.List;
@@ -45,11 +45,7 @@ public class RecordBuilder {
         return this.values;
     }
 
-    public String getPrimaryKeyValue() {
-        return this.values.get(this.header.getPrimaryKeyColumn().getIndex());
-    }
-
-    public dbms.table.Record build(Page page) {
+    public Record build(LeafPage page) {
         return new Record(page, this);
     }
 }

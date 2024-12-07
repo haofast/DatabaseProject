@@ -13,6 +13,11 @@ public class TimeCell extends IntegerCell {
     }
 
     @Override
+    public int getDataTypeCode() {
+        return 9;
+    }
+
+    @Override
     public void validate() {
         super.validate();
         int integerValue = Integer.parseInt(this.value);

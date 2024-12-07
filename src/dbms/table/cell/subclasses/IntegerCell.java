@@ -19,6 +19,11 @@ public class IntegerCell extends AbstractCell {
     }
 
     @Override
+    public int getDataTypeCode() {
+        return 3;
+    }
+
+    @Override
     protected void performWrite(ExtendedRaf raf) throws IOException {
         raf.writeInt(this.getIntegerValue());
     }

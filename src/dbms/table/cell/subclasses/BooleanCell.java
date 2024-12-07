@@ -22,6 +22,11 @@ public class BooleanCell extends AbstractCell {
     }
 
     @Override
+    public int getDataTypeCode() {
+        return 7;
+    }
+
+    @Override
     protected void performWrite(ExtendedRaf raf) throws IOException {
         raf.writeByte(getBooleanValue() ? 1 : 0);
     }

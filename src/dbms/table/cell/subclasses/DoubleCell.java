@@ -19,6 +19,11 @@ public class DoubleCell extends AbstractCell {
     }
 
     @Override
+    public int getDataTypeCode() {
+        return 6;
+    }
+
+    @Override
     protected void performWrite(ExtendedRaf raf) throws IOException {
         raf.writeDouble(this.getDoubleValue());
     }

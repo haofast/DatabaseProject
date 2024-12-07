@@ -17,6 +17,11 @@ public class YearCell extends IntegerCell  {
     }
 
     @Override
+    public int getDataTypeCode() {
+        return 8;
+    }
+
+    @Override
     protected void performWrite(ExtendedRaf raf) throws IOException {
         raf.writeByte(Byte.parseByte(this.value) - OFFSET);
     }

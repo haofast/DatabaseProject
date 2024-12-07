@@ -16,6 +16,11 @@ public class StringCell extends AbstractCell {
     }
 
     @Override
+    public int getDataTypeCode() {
+        return 12 + this.column.getSize();
+    }
+
+    @Override
     protected void performWrite(ExtendedRaf raf) throws IOException {
         raf.write(Arrays.copyOf(value.getBytes(), column.getSize()));
     }

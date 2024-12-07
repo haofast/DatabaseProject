@@ -19,6 +19,11 @@ public class ShortCell extends AbstractCell {
     }
 
     @Override
+    public int getDataTypeCode() {
+        return 2;
+    }
+
+    @Override
     protected void performWrite(ExtendedRaf raf) throws IOException {
         raf.writeShort(this.getShortValue());
     }
