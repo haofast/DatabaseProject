@@ -19,6 +19,11 @@ public class ByteCell extends AbstractCell {
     }
 
     @Override
+    public int getDataTypeCode() {
+        return 1;
+    }
+
+    @Override
     protected void performWrite(ExtendedRaf raf) throws IOException {
         raf.writeByte(this.getByteValue());
     }

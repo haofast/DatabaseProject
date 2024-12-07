@@ -14,6 +14,11 @@ public class NullCell extends AbstractCell {
     }
 
     @Override
+    public int getDataTypeCode() {
+        return 0;
+    }
+
+    @Override
     protected void performWrite(ExtendedRaf raf) throws IOException {
         /* do nothing */
     }
