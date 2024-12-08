@@ -12,6 +12,11 @@ public class DateCell extends DateTimeCell {
     }
 
     @Override
+    public int getDataTypeCode() {
+        return 11;
+    }
+
+    @Override
     protected String getDateFormatString() {
         return "yyyy-MM-dd";
     }

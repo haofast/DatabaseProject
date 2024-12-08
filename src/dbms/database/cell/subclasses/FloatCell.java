@@ -19,6 +19,11 @@ public class FloatCell extends AbstractCell {
     }
 
     @Override
+    public int getDataTypeCode() {
+        return 5;
+    }
+
+    @Override
     protected void performWrite(ExtendedRaf raf) throws IOException {
         raf.writeFloat(this.getFloatValue());
     }

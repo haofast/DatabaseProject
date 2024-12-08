@@ -38,6 +38,11 @@ public class DateTimeCell extends AbstractCell {
     }
 
     @Override
+    public int getDataTypeCode() {
+        return 10;
+    }
+
+    @Override
     protected void performWrite(ExtendedRaf raf) throws IOException {
         Date date = this.getDateValue();
         long epochTimeInSeconds = date.getTime() / 1000;

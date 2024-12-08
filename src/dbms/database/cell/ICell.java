@@ -10,6 +10,10 @@ public interface ICell extends Comparable<ICell> {
 
     public ICell getDataSource();
 
+    public default int getDataTypeCode() {
+        return this.getDataSource().getDataTypeCode();
+    }
+
     public default Column getColumn() {
         return this.getDataSource().getColumn();
     }

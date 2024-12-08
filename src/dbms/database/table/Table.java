@@ -17,35 +17,31 @@ public class Table {
     private int nextFreeRowID;
     private final Header header;
     private final Indexer indexer;
-    private final List<Page> pages;
+    private final PageContainer pageContainer;
 
     public Table(Column.Builder[] columnBuilders) {
         this.nextFreeRowID = 1;
         this.header = new Header(this, columnBuilders);
         this.indexer = new Indexer(this, this.header);
-        this.pages = IntStream.range(0, 10).mapToObj(i -> new Page(this, this.header)).toList();
+        this.pageContainer = new PageContainer(this, this.header);
     }
 
-    public List<Page> getPages() {
-        return new ArrayList<>(this.pages);
+    public List<Record> getRecords() {
+        return this.pageContainer.getRecords();
     }
 
-    public List<dbms.database.table.page.Record> getRecords() {
-        return this.pages.stream().map(Page::getRecords).flatMap(List::stream).toList();
+    public Record getRecordByRowID(int rowID) {
+        return this.pageContainer.getRecordByRowID(rowID);
     }
 
     public void addRecord(List<String> userValues) {
-        // add values for row ID and deletion marker
+        // add value for row ID
         List<String> values = new ArrayList<>(userValues);
         values.addFirst(String.valueOf(nextFreeRowID));
-        values.addLast("false");
 
-        // construct record and insert it into page
-        RecordBuilder recordBuilder = new RecordBuilder(this.header, values);
-        Page page = this.pages.get(Integer.parseInt(recordBuilder.getPrimaryKeyValue()) % this.pages.size());
-
-        if (page.addRecord(recordBuilder)) {
-            this.indexer.updateIndices(page.getRecordByRowID(nextFreeRowID));
+        // attempt to add new record int page, update index if successful
+        if (this.pageContainer.addRecord(new RecordBuilder(this.header, values), nextFreeRowID)) {
+            this.indexer.updateIndices(this.pageContainer.getRecordByRowID(nextFreeRowID));
             nextFreeRowID++;
         }
     }
@@ -64,13 +60,13 @@ public class Table {
 
     public void write(String filePath) throws IOException {
         ExtendedRaf raf = new ExtendedRaf(filePath, "rw");
-        for (Page p : this.pages) { p.write(raf); }
+        this.pageContainer.write(raf);
         raf.close();
     }
 
     public void read(String filePath) throws IOException {
         ExtendedRaf raf = new ExtendedRaf(filePath, "r");
-        for (Page p : this.pages) { p.read(raf); }
+        this.pageContainer.read(raf);
         raf.close();
     }
 
