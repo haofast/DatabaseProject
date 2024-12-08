@@ -1,6 +1,6 @@
 package dbms.exceptions;
 
-import dbms.table.Header;
+import dbms.database.table.Header;
 
 import java.util.List;
 

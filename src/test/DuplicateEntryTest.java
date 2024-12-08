@@ -1,9 +1,9 @@
 package test;
 
-import dbms.constants.ColumnFlag;
-import dbms.datatypes.StringType;
-import dbms.table.Column;
-import dbms.table.Table;
+import dbms.database.constants.ColumnFlag;
+import dbms.database.datatypes.StringType;
+import dbms.database.table.Column;
+import dbms.database.table.Table;
 
 import java.util.List;
 
