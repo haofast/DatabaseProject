@@ -1,6 +1,6 @@
 package dbms.exceptions;
 
-import dbms.table.Column;
+import dbms.database.table.Column;
 
 public class InvalidValueException extends RuntimeException {
     public InvalidValueException(String reason, String value, Column column) {

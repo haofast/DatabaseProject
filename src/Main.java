@@ -1,15 +1,16 @@
-import dbms.datatypes.IntegerType;
-import dbms.datatypes.ShortType;
-import dbms.datatypes.StringType;
-import dbms.internalSchema.InternalSchema;
+import dbms.database.datatypes.IntegerType;
+import dbms.database.datatypes.ShortType;
+import dbms.database.datatypes.StringType;
+import dbms.database.internalSchema.InternalSchema;
+import dbms.database.table.page.Criteria;
 import dbms.userInterface.CLI;
-import dbms.constants.ColumnFlag;
-import dbms.table.Column;
-import dbms.table.Record;
-import dbms.table.Table;
+import dbms.database.constants.ColumnFlag;
+import dbms.database.table.Column;
+import dbms.database.table.page.Record;
+import dbms.database.table.Table;
 import dbms.utilities.CsvRaf;
-import dbms.ddlCommands.*;
-import dbms.dmlAndDqlCommands.*;
+import dbms.userInterface.ddlCommands.*;
+import dbms.userInterface.dmlAndDqlCommands.*;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class Main {
         //uncomment printInternalSchema for viewing internal schema at start
         //internalSchema.printInternalSchema();
 
-        CLI userInterface = new CLI();
+        //CLI userInterface = new CLI();
     }
 
     public static void employeeCSVDemo() throws Exception {
