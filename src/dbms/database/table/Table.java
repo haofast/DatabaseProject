@@ -2,15 +2,13 @@ package dbms.database.table;
 
 import dbms.database.builders.RecordBuilder;
 import dbms.database.table.page.Criteria;
-import dbms.database.table.page.Page;
 import dbms.database.table.page.Record;
+import dbms.database.table.page.PageContainer;
 import dbms.utilities.ExtendedRaf;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.IntStream;
 
 public class Table {
 
@@ -50,7 +48,7 @@ public class Table {
         this.indexer.createIndex(indexName, columnName);
     }
 
-    public List<dbms.database.table.page.Record> searchRecordsByValue(String columnName, String searchKeyValue) {
+    public List<Record> searchRecordsByValue(String columnName, String searchKeyValue) {
         return this.indexer.searchRecordsByValue(columnName, searchKeyValue);
     }
 

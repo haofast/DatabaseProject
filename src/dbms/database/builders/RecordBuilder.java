@@ -49,7 +49,7 @@ public class RecordBuilder {
         return this.values.get(this.header.getPrimaryKeyColumn().getIndex());
     }
 
-    public dbms.table.Record build(Page page) {
+    public Record build(LeafPage page) {
         return new Record(page, this);
     }
 }

@@ -1,11 +1,10 @@
-package dbms.table.page;
+package dbms.database.table.page;
 
-import dbms.builders.RecordBuilder;
+import dbms.database.builders.RecordBuilder;
 import dbms.exceptions.InvalidValueException;
-import dbms.table.Header;
-import dbms.table.Record;
-import dbms.table.Table;
-import dbms.table.cell.ICell;
+import dbms.database.table.Header;
+import dbms.database.table.Table;
+import dbms.database.cell.ICell;
 import dbms.utilities.ExtendedRaf;
 import dbms.interfaces.IBundleable;
 
@@ -34,7 +33,7 @@ public class LeafPage extends AbstractPage implements IBundleable<LeafPage> {
     @Override
     public LeafPage getObjectCopy() {
         LeafPage copyOfSelf = new LeafPage(this.table, this.header, this.fileOffset);
-        copyOfSelf.records = new ArrayList<>(this.records.stream().map(dbms.table.Record::getObjectCopy).toList());
+        copyOfSelf.records = new ArrayList<>(this.records.stream().map(Record::getObjectCopy).toList());
         return copyOfSelf;
     }
 

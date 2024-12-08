@@ -1,7 +1,6 @@
 package dbms.database.table;
 
 import dbms.database.constants.ColumnFlag;
-import dbms.database.datatypes.BooleanType;
 import dbms.database.datatypes.IntegerType;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package dbms.table.page;
+package dbms.database.table.page;
 
 import dbms.utilities.ExtendedRaf;
 

@@ -1,9 +1,8 @@
-package dbms.table.page;
+package dbms.database.table.page;
 
-import dbms.builders.RecordBuilder;
-import dbms.table.Header;
-import dbms.table.Record;
-import dbms.table.Table;
+import dbms.database.builders.RecordBuilder;
+import dbms.database.table.Header;
+import dbms.database.table.Table;
 import dbms.utilities.ExtendedRaf;
 
 import java.io.IOException;
