@@ -2,8 +2,6 @@ import dbms.database.datatypes.IntegerType;
 import dbms.database.datatypes.ShortType;
 import dbms.database.datatypes.StringType;
 import dbms.database.internalSchema.InternalSchema;
-import dbms.database.table.page.Criteria;
-import dbms.userInterface.CLI;
 import dbms.database.constants.ColumnFlag;
 import dbms.database.table.Column;
 import dbms.database.table.page.Record;
@@ -12,6 +10,7 @@ import dbms.utilities.CsvRaf;
 import dbms.userInterface.ddlCommands.*;
 import dbms.userInterface.dmlAndDqlCommands.*;
 
+import java.io.IOException;
 import java.util.List;
 
 public class Main {
@@ -19,11 +18,18 @@ public class Main {
         //uncomment employeeCSVDemo for milestone 1 example
         //employeeCSVDemo();
 
+        //internalSchemaAndReadTableDemo();
         InternalSchema internalSchema = new InternalSchema();
         //uncomment printInternalSchema for viewing internal schema at start
         //internalSchema.printInternalSchema();
 
         //CLI userInterface = new CLI();
+    }
+
+    public static void internalSchemaAndReadTableDemo() throws IOException {
+        InternalSchema internalSchema = new InternalSchema();
+        System.out.println(internalSchema);
+        System.out.println(internalSchema.getTable("employee.tbl"));
     }
 
     public static void employeeCSVDemo() throws Exception {
@@ -39,7 +45,7 @@ public class Main {
             new Column.Builder("Department Number", new ShortType()),
         };
 
-        Table table = new Table(columns);
+        Table table = new Table("employee.tbl", columns);
         populateTable(table);
 
         System.out.println(">> Input >>");
@@ -47,11 +53,11 @@ public class Main {
         System.out.println();
 
         System.out.println("Writing table...");
-        table.write("employee.tbl");
+        table.write();
         System.out.println();
 
         System.out.println("Reading table...");
-        table.read("employee.tbl");
+        table.read();
         System.out.println();
 
         System.out.println(">> Output >>");

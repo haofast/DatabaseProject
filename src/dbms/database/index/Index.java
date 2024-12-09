@@ -16,16 +16,16 @@ public class Index {
 
     private final String name;
     private final Column column;
-    private final BTree<ICell, dbms.database.table.page.Record> indexTree;
+    private final BTree<ICell, Record> indexTree;
 
-    public Index(String name, Column column, List<dbms.database.table.page.Record> records) {
+    public Index(String name, Column column, List<Record> records) {
         this.name = name;
         this.column = column;
         this.indexTree = new BTree<>();
         this.initializeTreeElements(records);
     }
 
-    private void initializeTreeElements(List<dbms.database.table.page.Record> records) {
+    private void initializeTreeElements(List<Record> records) {
         int columnIndex = this.column.getIndex();
         records.forEach(r -> this.indexTree.insert(new BTreeKey<>(r.getCellByIndex(columnIndex), r)));
     }
@@ -42,11 +42,11 @@ public class Index {
         return this.name + ".ndx";
     }
 
-    public void addRecord(dbms.database.table.page.Record record) {
+    public void addRecord(Record record) {
         this.indexTree.insert(new BTreeKey<>(record.getCellByIndex(this.column.getIndex()), record));
     }
 
-    public List<dbms.database.table.page.Record> getRecordsByKeyValue(Column column, String keyValue) {
+    public List<Record> getRecordsByKeyValue(Column column, String keyValue) {
         ICell fakeCell = CellFactory.build(null, column, keyValue);
         return new ArrayList<>(this.indexTree.searchKeys(fakeCell).stream().map(BTreeKey::getObjectValue).toList());
     }

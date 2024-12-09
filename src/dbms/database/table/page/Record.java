@@ -87,8 +87,12 @@ public class Record implements IBundleable<Record> {
         return new ArrayList<>(this.cells);
     }
 
-    protected ICell getCellWithName(String name) {
+    public ICell getCellWithName(String name) {
         return this.cells.stream().filter(c -> c.getColumn().getName().equals(name)).findFirst().orElse(null);
+    }
+
+    public String getValueWithColumnName(String name) {
+        return this.getCellWithName(name).getValue();
     }
 
     public ICell getCellByIndex(int index) {

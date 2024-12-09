@@ -102,12 +102,12 @@ public class TableCommands {
     // Will add code to create a table (returned blank Table as placeholder)
     private Table createTable(String tableName, String columnInfo) {
         Column.Builder[] columnBuilders = {};
-        return new Table(columnBuilders);
+        return new Table(tableName, columnBuilders);
     }
 
     // Will add code to drop a table (returned blank Table as a placeholder)
     private Table dropTable(String tableName) {
         Column.Builder[] columnBuilders = {};
-        return new Table(columnBuilders);
+        return new Table(tableName, columnBuilders);
     }
 }
