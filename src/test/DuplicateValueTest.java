@@ -22,7 +22,7 @@ public class DuplicateValueTest {
                 new Column.Builder("Last Name", new StringType(20)),
         };
 
-        Table table = new Table(columns);
+        Table table = new Table("test_table.tbl", columns);
 
         table.addRecord(List.of(new String[]{"123456789", "Brandon", "Y", "Ho"}));
         table.addRecord(List.of(new String[]{"987654321", "Brian", "D", "Yip"}));
