@@ -1,5 +1,5 @@
 package dbms.userInterface.CommandParser;
-import dbms.constants.CommandType;
+import dbms.database.constants.CommandType;
 
 import java.util.List;
 

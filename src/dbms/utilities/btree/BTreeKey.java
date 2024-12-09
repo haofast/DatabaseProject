@@ -19,10 +19,6 @@ public class BTreeKey<K extends Comparable<K>, O> {
         return this.objectValue;
     }
 
-    public boolean greaterThan(BTreeKey<K, O> key) {
-        return this.keyValue.compareTo(key.keyValue) > 0;
-    }
-
     public boolean greaterThanOrEqual(BTreeKey<K, O> key) {
         return this.keyValue.compareTo(key.keyValue) >= 0;
     }
