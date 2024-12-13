@@ -49,7 +49,7 @@ public class KryptonTables {
     }
 
     protected static Table getTable(String tableName) throws IOException {
-        Record tableRecord = kryptonTablesTable.searchRecordsByValue(TABLE_NAME, tableName).getFirst();
+        Record tableRecord = kryptonTablesTable.searchRecordsByValueUndeleted(TABLE_NAME, tableName).getFirst();
         int tableRowID = tableRecord.getRowIDValue();
         int lastUsedRowID = Integer.parseInt(tableRecord.getValueWithColumnName(RECORD_COUNT));
         Table table = new Table(tableName, KryptonColumns.getColumnBuildersForTable(tableRowID), lastUsedRowID);
@@ -59,18 +59,23 @@ public class KryptonTables {
 
     protected static void addTable(Table table) throws Exception {
         // can't create a table whose name is already taken
-        if (kryptonTablesTable.searchRecordsByValue(TABLE_NAME, table.getName()) != null) {
+        if (kryptonTablesTable.searchRecordsByValueUndeleted(TABLE_NAME, table.getName()) != null) {
             throw new Exception("ERROR: Unable to create table with name " + table.getName() + " because name is already taken. Operation aborted.");
         }
 
         String rowCountString = String.valueOf(table.getLastUsedRowID());
         kryptonTablesTable.addRecord(new ArrayList<>(List.of(new String[]{table.getName(), rowCountString})));
-        int tableRowID = kryptonTablesTable.searchRecordsByValue(TABLE_NAME, table.getName()).getFirst().getRowIDValue();
+        int tableRowID = kryptonTablesTable.searchRecordsByValueUndeleted(TABLE_NAME, table.getName()).getFirst().getRowIDValue();
         KryptonColumns.addColumns(tableRowID, table);
     }
 
+    protected static void dropTable(String tableName) throws Exception {
+        Record tableRecord = kryptonTablesTable.searchRecordsByValueUndeleted(TABLE_NAME, tableName).getFirst();
+        tableRecord.setDeleted();
+    }
+
     protected static void updateTableRecordCount(Table table) {
-        Record tableRecord = kryptonTablesTable.searchRecordsByValue(TABLE_NAME, table.getName()).getFirst();
+        Record tableRecord = kryptonTablesTable.searchRecordsByValueUndeleted(TABLE_NAME, table.getName()).getFirst();
         tableRecord.getCellWithName(RECORD_COUNT).setValue(String.valueOf(table.getLastUsedRowID()));
     }
 

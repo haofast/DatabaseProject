@@ -71,6 +71,10 @@ public class Table {
         return this.indexer.searchRecordsByValue(columnName, searchKeyValue);
     }
 
+    public List<Record> searchRecordsByValueUndeleted(String columnName, String searchKeyValue) {
+        return this.indexer.searchRecordsByValueUndeleted(columnName, searchKeyValue);
+    }
+
     public List<Record> searchRecordsByCriteria(Criteria criteria) {
         return this.indexer.searchRecordsByCriteria(criteria);
     }

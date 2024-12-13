@@ -63,6 +63,14 @@ public class Record implements IBundleable<Record> {
        );
     }
 
+    public boolean isDeleted() {
+        return this.deleted;
+    }
+
+    public void setDeleted() {
+        this.deleted = true;
+    }
+
     private int getIndexInPage() {
         return this.page.getRecords().indexOf(this);
     }

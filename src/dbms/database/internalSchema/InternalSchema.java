@@ -29,6 +29,11 @@ public class InternalSchema {
         return table;
     }
 
+    public void dropTable(String tableName) throws Exception {
+        KryptonTables.dropTable(tableName);
+        KryptonTables.write();
+    }
+
     /* procedure for saving a table to disk */
     public void saveTable(Table table) throws IOException {
         // update and write meta-data for table to disk
