@@ -1,5 +1,7 @@
 package dbms.userInterface;
 
+import dbms.userInterface.dmlAndDqlCommands.AbstractCommand;
+
 import java.util.List;
 
 public class commandService {
@@ -13,8 +15,8 @@ public class commandService {
         String result;
 
         if (!commandString.isEmpty()){
-            Command command = new Command(commandString);
-            result = command.getResult();
+            AbstractCommand abstractCommand = new AbstractCommand(commandString);
+            result = abstractCommand.getResult();
         }
         else result = "Please enter a command bro";
         return result;

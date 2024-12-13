@@ -1,9 +1,9 @@
 package test;
 
-import dbms.constants.ColumnFlag;
-import dbms.datatypes.StringType;
-import dbms.table.Column;
-import dbms.table.Table;
+import dbms.database.constants.ColumnFlag;
+import dbms.database.datatypes.StringType;
+import dbms.database.table.Column;
+import dbms.database.table.Table;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ public class DuplicateEntryTest {
             new Column.Builder("Last Name", new StringType(20)),
         };
 
-        Table table = new Table(columns);
+        Table table = new Table("test_table.tbl", columns);
 
         table.addRecord(List.of(new String[]{"123456789", "Brandon", "Y", "Ho"}));
 
