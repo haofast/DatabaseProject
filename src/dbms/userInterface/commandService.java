@@ -6,15 +6,14 @@ public class commandService {
 
     public static String execute(String command) {
         String cmd = command.toUpperCase();
-        List<String> commandArgs = List.of(cmd.split("\\W+"));
-        return processCommand(commandArgs);
+        return processCommand(cmd);
     }
 
-    public static String processCommand(List<String> commandArgs) {
+    public static String processCommand(String commandString) {
         String result;
 
-        if (!commandArgs.isEmpty()){
-            Command command = new Command(commandArgs);
+        if (!commandString.isEmpty()){
+            Command command = new Command(commandString);
             result = command.getResult();
         }
         else result = "Please enter a command bro";
