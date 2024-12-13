@@ -48,6 +48,10 @@ public class Indexer {
                 : index.getRecordsByKeyValue(column, searchKeyValue);
     }
 
+    protected List<dbms.database.table.page.Record> searchRecordsByValueUndeleted(String columnName, String searchKeyValue) {
+        return new ArrayList<Record>(this.searchRecordsByValue(columnName, searchKeyValue).stream().filter(r -> !r.isDeleted()).toList());
+    }
+
     /* search records in the index based on a multiple column values */
     protected List<dbms.database.table.page.Record> searchRecordsByCriteria(Criteria criteria) {
         List<Column> columnObjects = getColumnsByName(criteria.getColumnNames());

@@ -2,8 +2,8 @@ package dbms.database.table;
 
 import dbms.database.builders.RecordBuilder;
 import dbms.database.table.page.Criteria;
-import dbms.database.table.page.Record;
 import dbms.database.table.page.PageContainer;
+import dbms.database.table.page.Record;
 import dbms.utilities.ExtendedRaf;
 
 import java.io.IOException;
@@ -13,18 +13,37 @@ import java.util.List;
 public class Table {
 
     private int nextFreeRowID;
+    private final String name;
     private final Header header;
     private final Indexer indexer;
     private final PageContainer pageContainer;
 
-    public Table(Column.Builder[] columnBuilders) {
+    public Table(String name, Column.Builder[] columnBuilders) {
         this.nextFreeRowID = 1;
+        this.name = name;
         this.header = new Header(this, columnBuilders);
         this.indexer = new Indexer(this, this.header);
         this.pageContainer = new PageContainer(this, this.header);
     }
 
-    public List<Record> getRecords() {
+    public Table(String name, Column.Builder[] columnBuilders, int lastUsedRowID) {
+        this(name, columnBuilders);
+        this.nextFreeRowID = lastUsedRowID + 1;
+    }
+
+    public int getLastUsedRowID() {
+        return this.nextFreeRowID - 1;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public List<Column> getColumns() {
+        return this.header.getColumns();
+    }
+
+    public List<dbms.database.table.page.Record> getRecords() {
         return this.pageContainer.getRecords();
     }
 
@@ -52,38 +71,32 @@ public class Table {
         return this.indexer.searchRecordsByValue(columnName, searchKeyValue);
     }
 
+    public List<Record> searchRecordsByValueUndeleted(String columnName, String searchKeyValue) {
+        return this.indexer.searchRecordsByValueUndeleted(columnName, searchKeyValue);
+    }
+
     public List<Record> searchRecordsByCriteria(Criteria criteria) {
         return this.indexer.searchRecordsByCriteria(criteria);
     }
 
-    public void write(String filePath) throws IOException {
-        ExtendedRaf raf = new ExtendedRaf(filePath, "rw");
+    public void write() throws IOException {
+        ExtendedRaf raf = new ExtendedRaf(this.name, "rw");
         this.pageContainer.write(raf);
         raf.close();
     }
 
-    public void read(String filePath) throws IOException {
-        ExtendedRaf raf = new ExtendedRaf(filePath, "r");
+    public void read() throws IOException {
+        ExtendedRaf raf = new ExtendedRaf(this.name, "r");
         this.pageContainer.read(raf);
         raf.close();
+
+        List<Record> records = this.getRecords();
+        if (!records.isEmpty()) this.nextFreeRowID = records.getLast().getRowIDValue() + 1;
     }
 
     public String toString() {
         StringBuilder sb = new StringBuilder(this.header.toString());
         this.getRecords().forEach(r -> sb.append('\n').append(r));
         return sb.toString();
-    }
-
-    public boolean doesTableExist(String filePath) {
-        boolean tableExists = false;
-        try {
-            read(filePath);
-            tableExists = true;
-        }
-        catch (Exception e){
-            tableExists = false;
-        }
-
-        return tableExists;
     }
 }

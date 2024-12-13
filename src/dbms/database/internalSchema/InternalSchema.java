@@ -1,44 +1,63 @@
 package dbms.database.internalSchema;
 
+import dbms.database.table.Column;
+import dbms.database.table.Table;
+
 import java.io.IOException;
+import java.util.Map;
 
 public class InternalSchema {
-    KyptonTables kyptonTables = new KyptonTables();
-    KyptonColumns kyptonColumns = new KyptonColumns();
 
     public InternalSchema() throws IOException {
-        kyptonTables.initializeKyptonTables();
-        kyptonColumns.initializeKyptonColumns();
+        KryptonTables.initKryptonTablesTable();
+        KryptonColumns.initKryptonColumnsTable();
     }
 
-    public void printInternalSchema(){
-        System.out.println(">> Internal Schema Initialized >>");
-        System.out.println();
+    /* procedure for creating a table and recording changes to disk */
+    public Table createTable(String tableName, Column.Builder[] columnBuilders) throws Exception {
+        // create table in memory
+        Table table = new Table(tableName, columnBuilders);
 
-        System.out.println(">> kypton_tables Output >>");
-        System.out.println(kyptonTables.getKyptonTable());
-        System.out.println();
+        // add table to meta-data table and write to disk
+        KryptonTables.addTable(table);
+        KryptonColumns.write();
+        KryptonTables.write();
 
-        System.out.println(">> kypton_columns Output >>");
-        System.out.println(kyptonColumns.getKyptonColumnTable());
-        System.out.println();
+        // write the table data to disk
+        table.write();
+
+        return table;
     }
 
-    public boolean doesTableHaveColumn(int tableRowId, String columnName){
-        return true;
+    public void dropTable(String tableName) throws Exception {
+        KryptonTables.dropTable(tableName);
+        KryptonTables.write();
     }
 
-    public boolean isValidTable(String tableName){
-        return kyptonTables.doesTableExist(tableName);
+    /* procedure for saving a table to disk */
+    public void saveTable(Table table) throws IOException {
+        // update and write meta-data for table to disk
+        KryptonTables.updateTableRecordCount(table);
+        KryptonTables.write();
+
+        // write table data to disk
+        table.write();
     }
 
-    public boolean isValidColumn(String columnName){
-        return kyptonColumns.doesColumnExist(columnName);
+    /* returns all table instances */
+    public Map<String, Table> getTables() throws IOException {
+        return KryptonTables.getTables();
     }
 
-//    public void getTableColumnBuilder(){
-//        Column.Builder[] tableColumns = new Column.Builder[];
-//
-//        new tableColumns;
-//    }
+    /* returns the table matching the table name */
+    public Table getTable(String tableName) throws IOException {
+        return KryptonTables.getTable(tableName);
+    }
+
+    public String toString() {
+        return new StringBuilder()
+            .append(KryptonTables.getKryptonTablesTable().toString()).append("\n")
+            .append(KryptonColumns.getKryptonColumnsTable().toString()).append("\n")
+            .toString();
+    }
 }
