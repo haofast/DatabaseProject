@@ -8,15 +8,14 @@ public class commandService {
 
     public static String execute(String command) {
         String cmd = command.toUpperCase();
-        List<String> commandArgs = List.of(cmd.split("\\W+"));
-        return processCommand(commandArgs);
+        return processCommand(cmd);
     }
 
-    public static String processCommand(List<String> commandArgs) {
+    public static String processCommand(String commandString) {
         String result;
 
-        if (!commandArgs.isEmpty()){
-            AbstractCommand abstractCommand = new AbstractCommand(commandArgs);
+        if (!commandString.isEmpty()){
+            AbstractCommand abstractCommand = new AbstractCommand(commandString);
             result = abstractCommand.getResult();
         }
         else result = "Please enter a command bro";

@@ -14,7 +14,6 @@ public class CLI {
     }
 
     public void startCLI(){
-        getInput();
         while (!isExitCommand()) {
             getInput();
             processInput();

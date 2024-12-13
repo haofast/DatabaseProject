@@ -11,8 +11,9 @@ public class CommandParser {
 
     public CommandParser() {}
 
-    public CommandParser(List<String> inputtedCommand) {
-        this.inputtedCommand = inputtedCommand;
+    public CommandParser(String inputtedCommand) {
+        List<String> commandArgs = List.of(inputtedCommand.split("\\W+"));
+        this.inputtedCommand = commandArgs;
     }
 
     public static boolean isKeyword(String word) {
