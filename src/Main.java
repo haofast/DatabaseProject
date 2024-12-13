@@ -6,6 +6,7 @@ import dbms.database.constants.ColumnFlag;
 import dbms.database.table.Column;
 import dbms.database.table.page.Record;
 import dbms.database.table.Table;
+import dbms.userInterface.CLI;
 import dbms.utilities.CsvRaf;
 import dbms.userInterface.ddlCommands.*;
 import dbms.userInterface.dmlAndDqlCommands.*;
@@ -23,7 +24,7 @@ public class Main {
         //uncomment printInternalSchema for viewing internal schema at start
         //internalSchema.printInternalSchema();
 
-        //CLI userInterface = new CLI();
+        CLI userInterface = new CLI();
     }
 
     public static void internalSchemaAndReadTableDemo() throws IOException {

@@ -1,7 +1,7 @@
 package dbms.userInterface.dmlAndDqlCommands;
 
 import dbms.database.constants.CommandType;
-import dbms.dmlAndDqlCommands.Select;
+import dbms.userInterface.dmlAndDqlCommands.Select;
 import dbms.userInterface.CommandParser.CommandParser;
 
 import java.util.List;
@@ -12,15 +12,16 @@ public class AbstractCommand {
     CommandType cmdType;
     CommandParser commandParser;
 
-    public AbstractCommand(String inputtedCommand){
+    public AbstractCommand(String inputtedCommand) {
         CommandParser commandParser = new CommandParser(inputtedCommand);
         cmdType = commandParser.getCommandType();
 
-        switch (cmdType){
+        switch (cmdType) {
             case CommandType.SELECT -> new Select(inputtedCommand);
         }
+    }
 
-    public AbstractCommand(CommandType cmdType, List<String> args){
+    public AbstractCommand(CommandType cmdType, String args){
         this.args = args;
         this.cmdType = cmdType;
     }
