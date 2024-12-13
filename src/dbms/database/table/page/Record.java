@@ -103,6 +103,10 @@ public class Record implements IBundleable<Record> {
         return this.getCellWithName(name).getValue();
     }
 
+    public List<String> getValuesWithColumnNames(List<String> names) {
+        return new ArrayList<>(names.stream().map(this::getValueWithColumnName).toList());
+    }
+
     public ICell getCellByIndex(int index) {
         return this.cells.get(index);
     }
