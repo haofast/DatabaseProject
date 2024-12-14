@@ -24,6 +24,8 @@ public class commandService {
             return result;
         } catch (IOException e) {
             throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }

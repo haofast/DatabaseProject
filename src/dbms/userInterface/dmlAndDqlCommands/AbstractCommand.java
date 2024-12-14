@@ -15,7 +15,7 @@ public class AbstractCommand {
     CommandType cmdType;
     CommandParser commandParser;
 
-    public AbstractCommand(String inputtedCommand) throws IOException {
+    public AbstractCommand(String inputtedCommand) throws Exception {
         CommandParser commandParser = new CommandParser(inputtedCommand);
         cmdType = commandParser.getCommandType();
 

@@ -20,7 +20,7 @@ public class TableCommands {
     private List<Table> tables;
 
     // Constructor
-    public TableCommands(String query) throws IOException {
+    public TableCommands(String query) throws Exception {
         // Initiate
         this.query = query.trim();
         this.tableName = "";
@@ -41,7 +41,7 @@ public class TableCommands {
     }
 
     // Handle the query entered by user
-    private void handleQuery() throws IOException {
+    private void handleQuery() throws Exception {
         // Split query and get first character for action
         String[] querySplit = this.query.trim().split("\\s+");
         String action = querySplit[0];
@@ -116,17 +116,15 @@ public class TableCommands {
 
 
     // Will add code to create a table (returned blank Table as placeholder)
-    private Table createTable(String tableName) throws IOException {
+    private Table createTable(String tableName) throws Exception {
         Column.Builder[] columnBuilders = {};
-        Table newTable = new Table(tableName, columnBuilders);
-        newTable.write();
+        Table newTable = InternalSchema.globalInstance.createTable(tableName, columnBuilders);
         return newTable;
     }
     // Will add code to create a table (returned blank Table as placeholder)
-    private Table createTable(String tableName, List<String> columnInfo) throws IOException {
+    private Table createTable(String tableName, List<String> columnInfo) throws Exception {
         Column.Builder[] columnBuilders = {};
-        Table newTable = new Table(tableName, columnBuilders);
-        newTable.write();
+        Table newTable = InternalSchema.globalInstance.createTable(tableName, columnBuilders);
         return newTable;
     }
 

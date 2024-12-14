@@ -63,7 +63,7 @@ public class KryptonTables {
 
     protected static void addTable(Table table) throws Exception {
         // can't create a table whose name is already taken
-        if (kryptonTablesTable.searchRecordsByValueUndeleted(TABLE_NAME, table.getName()) != null) {
+        if (!kryptonTablesTable.searchRecordsByValueUndeleted(TABLE_NAME, table.getName()).isEmpty()) {
             throw new Exception("ERROR: Unable to create table with name " + table.getName() + " because name is already taken. Operation aborted.");
         }
 
@@ -85,7 +85,7 @@ public class KryptonTables {
 
     private static Table initializeTableInMemory() {
         return new Table(TABLES_TABLE_NAME, new Column.Builder[]{
-            new Column.Builder(TABLE_NAME,   new StringType(20)),
+            new Column.Builder(TABLE_NAME,   new StringType(24)), //doc requirements plus .tbl extension
             new Column.Builder(RECORD_COUNT, new IntegerType())
         });
     }
