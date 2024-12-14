@@ -1,4 +1,5 @@
 package dbms.userInterface.CommandParser;
+
 import dbms.database.constants.CommandType;
 
 import java.util.List;
@@ -14,13 +15,14 @@ public class CommandTypeParser extends CommandParser {
 
         if (isKeyword(firstKey) && isKeyword(secondKey)){
             commandType = getCommandTypeEnum(firstKey, secondKey);
+        } else {
+            commandType = getCommandTypeEnum(firstKey);
         }
-        else commandType = getCommandTypeEnum(firstKey);
 
         return commandType;
     }
 
-    static CommandType getCommandTypeEnum(String arg){
+    static CommandType getCommandTypeEnum(String arg) {
         CommandType commandType = CommandType.INVALID;
 
         if (arg.compareTo("SHOW") == 0) {
@@ -42,7 +44,7 @@ public class CommandTypeParser extends CommandParser {
         return commandType;
     }
 
-    private static CommandType getCommandTypeEnum(String arg1, String arg2){
+    private static CommandType getCommandTypeEnum(String arg1, String arg2) {
         CommandType commandType = CommandType.INVALID;
 
         if (arg1.compareTo("CREATE") + arg2.compareTo("TABLE") == 0) {

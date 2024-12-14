@@ -22,7 +22,11 @@ public class KryptonTables {
 
     public static void initKryptonTablesTable() throws IOException {
         kryptonTablesTable = initializeTableInMemory();
-        if (tableFileExistsOnDisk()) kryptonTablesTable.read();
+        if (tableFileExistsOnDisk()) {
+            kryptonTablesTable.read();
+        } else {
+            kryptonTablesTable.write();
+        };
     }
 
     protected static Table getKryptonTablesTable() {

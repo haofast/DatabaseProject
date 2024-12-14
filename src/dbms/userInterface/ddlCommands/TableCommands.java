@@ -49,9 +49,8 @@ public class TableCommands {
 
         // Create a table
         else if (action.equalsIgnoreCase("CREATE")) {
-            if (querySplit.length >= 4) {
+            if (querySplit.length >= 3) {
                 this.tableName = querySplit[2];
-                System.out.println("\nTable: " + this.tableName);
 
                 // Get list of columns (and info) to put in table (split on open parentheses)
                 String[] columnsInfoInQuery = this.query.trim().split("\\(");
@@ -63,15 +62,16 @@ public class TableCommands {
 
                 // Get list of values (and info) to be inserted
                 String[] columnsInfo = columnsInfoStr.split(",");
-                System.out.println("\nColumn Info: ");
                 for (String c: columnsInfo) {
                     c = c.trim();
                     this.columnInfoList.add(c);
-                    System.out.println(c);
                 }
+
+
             }
-            else
+            else {
                 System.out.println("\nQuery is invalid!");
+            }
         }
 
         // Drop a table

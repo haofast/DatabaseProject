@@ -17,7 +17,7 @@ public class CommandParser {
     }
 
     public static boolean isKeyword(String word) {
-        return Arrays.stream(keyWords).equals(word);
+        return Arrays.asList(keyWords).contains(word.toUpperCase());
     }
 
     public CommandType getCommandType(){

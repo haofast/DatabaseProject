@@ -6,6 +6,7 @@ import dbms.userInterface.ddlCommands.TableCommands;
 import dbms.userInterface.dmlAndDqlCommands.Select;
 import dbms.userInterface.CommandParser.CommandParser;
 
+import java.io.IOException;
 import java.util.List;
 
 public class AbstractCommand {
@@ -14,7 +15,7 @@ public class AbstractCommand {
     CommandType cmdType;
     CommandParser commandParser;
 
-    public AbstractCommand(String inputtedCommand) {
+    public AbstractCommand(String inputtedCommand) throws IOException {
         CommandParser commandParser = new CommandParser(inputtedCommand);
         cmdType = commandParser.getCommandType();
 
