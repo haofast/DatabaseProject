@@ -1,5 +1,9 @@
 package dbms.userInterface.dmlAndDqlCommands;
 
+import dbms.database.internalSchema.InternalSchema;
+import dbms.database.table.Table;
+
+import java.io.IOException;
 import java.util.*;
 
 public class Insert {
@@ -59,6 +63,18 @@ public class Insert {
                 this.valueList.add(val);
                 System.out.println(val);
             }
+
+            try {
+                // Get the table from internal schema
+                Table table = InternalSchema.globalInstance.getTable(this.tableName + ".tbl");
+                table.addRecord(new ArrayList<>(Arrays.asList(valuesToInsert)));
+                InternalSchema.globalInstance.saveTable(table);
+            } catch (IOException e) {
+                System.out.println("ERROR: unable to insert record");
+                System.out.println(e);
+            }
+
+
         }
         else
             System.out.println("\nQuery is invalid!");

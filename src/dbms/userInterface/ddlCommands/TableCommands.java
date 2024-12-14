@@ -1,5 +1,7 @@
 package dbms.userInterface.ddlCommands;
 
+import dbms.database.internalSchema.InternalSchema;
+import dbms.database.internalSchema.KryptonTables;
 import dbms.database.table.Column;
 import dbms.database.table.Table;
 
@@ -78,7 +80,7 @@ public class TableCommands {
         else if (action.equalsIgnoreCase("DROP")) {
             if (querySplit.length == 3) {
                 this.tableName = querySplit[2];
-                Table dropped = this.dropTable(this.tableName);
+                this.dropTable(tableName);
                 System.out.println("\nDropped table: " + this.tableName);
             }
             else
@@ -106,8 +108,12 @@ public class TableCommands {
     }
 
     // Will add code to drop a table (returned blank Table as a placeholder)
-    private Table dropTable(String tableName) {
-        Column.Builder[] columnBuilders = {};
-        return new Table(tableName, columnBuilders);
+    private void dropTable(String tableName) {
+        try {
+            InternalSchema.globalInstance.dropTable(tableName + ".tbl");
+        } catch (Exception e) {
+            System.out.println("ERROR: unable to drop table");
+            System.out.println(e);
+        }
     }
 }
