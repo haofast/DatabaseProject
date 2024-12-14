@@ -85,7 +85,7 @@ public class KryptonTables {
 
     private static Table initializeTableInMemory() {
         return new Table(TABLES_TABLE_NAME, new Column.Builder[]{
-            new Column.Builder(TABLE_NAME,   new StringType(24)), //doc requirements plus .tbl extension
+            new Column.Builder(TABLE_NAME,   new StringType(20)), //doc requirements plus .tbl extension
             new Column.Builder(RECORD_COUNT, new IntegerType())
         });
     }

@@ -1,11 +1,9 @@
 package dbms.userInterface.ddlCommands;
 
+import dbms.database.datatypes.*;
 import dbms.database.internalSchema.InternalSchema;
 import dbms.database.internalSchema.KryptonTables;
 import dbms.database.constants.ColumnFlag;
-import dbms.database.datatypes.IntegerType;
-import dbms.database.datatypes.ShortType;
-import dbms.database.datatypes.StringType;
 import dbms.database.table.Column;
 import dbms.database.table.Table;
 
@@ -123,7 +121,49 @@ public class TableCommands {
     }
     // Will add code to create a table (returned blank Table as placeholder)
     private Table createTable(String tableName, List<String> columnInfo) throws Exception {
-        Column.Builder[] columnBuilders = {};
+        List<Column.Builder> builders = new ArrayList<>();
+
+        for(String column : columnInfo){
+            String[] columnSplit = column.split("\\s+");
+            String columnName = columnSplit[0];
+
+            String dataTypeString = columnSplit[1];
+            AbstractDataType dataType = switch (dataTypeString.toUpperCase()) {
+                case "NULL" -> new NullType();
+                case "BYTE" -> new ByteType();
+                case "SHORT" -> new ShortType();
+                case "INTEGER" -> new IntegerType();
+                case "LONG" -> new LongType();
+                case "FLOAT" -> new FloatType();
+                case "DOUBLE" -> new DoubleType();
+                case "YEAR" -> new YearType();
+                case "TIME" -> new TimeType();
+                case "DATETIME" -> new DateTimeType();
+                case "DATE" -> new DateType();
+                case "STRING" -> new StringType(50);
+                case "BOOLEAN" -> new BooleanType();
+                default -> throw new IllegalStateException("Unexpected value: " + dataTypeString);
+            };
+
+            Column.Builder builder = new Column.Builder(columnName, dataType);
+            if (columnInfo.contains("NOT NULL")) {
+                builder.addExtension(ColumnFlag.NOT_NULL);
+            }
+
+            if (columnInfo.contains("UNIQUE")) {
+                builder.addExtension(ColumnFlag.UNIQUE);
+            }
+
+            if (columnInfo.contains("PRIMARY KEY")) {
+                builder.addExtension(ColumnFlag.PRIMARY_KEY);
+            }
+
+            builders.add(builder);
+        }
+
+        Column.Builder[] columnBuilders = builders.toArray(new Column.Builder[0]);
+
+
         Table newTable = InternalSchema.globalInstance.createTable(tableName, columnBuilders);
         return newTable;
     }
