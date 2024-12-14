@@ -1,5 +1,12 @@
 package dbms.userInterface.dmlAndDqlCommands;
 
+import dbms.database.internalSchema.InternalSchema;
+import dbms.database.table.Table;
+import dbms.database.table.page.Criteria;
+import dbms.database.table.page.Record;
+import dbms.userInterface.CommandParser.WhereClause;
+
+import java.io.IOException;
 import java.util.*;
 
 public class Select {
@@ -12,7 +19,7 @@ public class Select {
 
     // Constructor only takes in query
     // Will add more methods and code to handle commands and backend
-    public Select(String query) {
+    public Select(String query) throws IOException {
         // Initiate
         this.query = query.trim();
         this.columnList = new ArrayList<String>();
@@ -34,12 +41,14 @@ public class Select {
     }
 
     // Handle the query entered by user
-    private void handleQuery() {
+    private void handleQuery() throws IOException {
+        boolean hasCriteria = false;
+
         // Split query and get first character for action
         String[] querySplit = this.query.trim().split("\\s+");
 
         // Execute select query if query is of valid length
-        if (querySplit.length >= 6) {
+        if (querySplit.length >= 4) {
             String[] twoParts = this.query.trim().split("(?i)FROM");
 
             // Split on "FROM" to isolate list of columns
@@ -52,8 +61,7 @@ public class Select {
 
             // From list of columns, populate our list of columns
             String[] listOfColumns = listOfColumnsStr.trim().split(",");
-            System.out.println("\nColumns Selected: ");
-            for (String col: listOfColumns) {
+            for (String col : listOfColumns) {
                 col = col.trim();
                 if (col.equals("*")) {
                     this.returnAll = true;
@@ -62,23 +70,59 @@ public class Select {
                 this.columnList.add(col);
                 System.out.println(col);
             }
-            this.checkReturnAll();
-            System.out.println("\nReturn All? " + this.returnAll);
 
             // From second part, get table name and condition
             String[] secondPartSplit = secondPart.trim().split("(?i)WHERE");
             this.tableName = secondPartSplit[0].trim();
-            this.condition = secondPartSplit[1].trim();
 
-            System.out.println("\nSelect from Table: " + this.tableName);
-            System.out.println("\nSelect on Condition: " + this.condition);
+
+
+
+            if (secondPartSplit.length > 1) {
+                handleWhereClause(secondPartSplit[1], listOfColumns);
+            } else {
+
+                // find the table
+                Table table = InternalSchema.globalInstance.getTable(this.tableName + ".tbl");
+                List<Record> records = table.getRecordsUndeleted();
+
+                if (returnAll) {
+                    // print records with no column filtration
+                    for (Record r : records) {
+                        System.out.println(r.getValues());
+                    }
+
+                } else {
+                    // print records with columns filtered
+                    for (Record r : records) {
+                        System.out.println(r.getValuesWithColumnNames(List.of(listOfColumns)));
+                    }
+                }
+            }
         }
-        else
-            System.out.println("\nQuery is invalid!");
     }
 
-    private void checkReturnAll() {
-        if (this.returnAll)
-            this.columnList = new ArrayList<String>();
+    private void handleWhereClause(String whereConditions, String[] listOfColumns) throws IOException {
+
+        // used to store search criteria
+        Criteria criteria = new Criteria();
+
+        // find the table
+        Table table = InternalSchema.globalInstance.getTable(this.tableName + ".tbl");
+
+
+        List<Record> records = WhereClause.processWhere(table, whereConditions);
+
+        if (returnAll) {
+            // print records with no column filtration
+            for (Record r : records) {
+                System.out.println(r.getValues());
+            }
+        } else {
+            // print records with columns filtered
+            for (Record r : records) {
+                System.out.println(r.getValuesWithColumnNames(List.of(listOfColumns)));
+            }
+        }
     }
 }

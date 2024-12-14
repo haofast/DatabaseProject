@@ -1,5 +1,9 @@
 package dbms.userInterface.dmlAndDqlCommands;
 
+import dbms.database.internalSchema.InternalSchema;
+import dbms.database.table.Table;
+
+import java.io.IOException;
 import java.util.*;
 
 public class Insert {
@@ -35,7 +39,7 @@ public class Insert {
         String[] querySplit = this.query.trim().split("\\s+");
 
         // Execute insert query if query is of valid length
-        if (querySplit.length >= 6) {
+        if (querySplit.length >= 5) {
             this.tableName = querySplit[3].trim();
             System.out.println("\nInserting into Table: " + this.tableName);
 
@@ -52,13 +56,24 @@ public class Insert {
                 valuesToInsertStr = valuesToInsertStr.substring(0, valuesToInsertStr.length() - 1);
 
             // Get list of values to be inserted
-            String[] valuesToInsert = valuesToInsertStr.trim().split(",");
+            List<String> values = new ArrayList<>(Arrays.stream(valuesToInsertStr.trim().split(","))
+                .map(String::trim).toList());
+
             System.out.println("\nValues Inserted Into Table: ");
-            for (String val: valuesToInsert) {
-                val = val.trim();
-                this.valueList.add(val);
-                System.out.println(val);
+            System.out.println(values);
+
+            try {
+                // Get the table from internal schema
+                Table table = InternalSchema.globalInstance.getTable(this.tableName + ".tbl");
+                table.addRecord(values);
+                InternalSchema.globalInstance.saveTable(table);
+
+            } catch (IOException e) {
+                System.out.println("ERROR: unable to insert record");
+                System.out.println(e);
             }
+
+
         }
         else
             System.out.println("\nQuery is invalid!");

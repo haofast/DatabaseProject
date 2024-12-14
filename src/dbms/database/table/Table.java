@@ -47,6 +47,10 @@ public class Table {
         return this.pageContainer.getRecords();
     }
 
+    public List<Record> getRecordsUndeleted() {
+        return new ArrayList<>(this.getRecords().stream().filter(r -> !r.isDeleted()).toList());
+    }
+
     public Record getRecordByRowID(int rowID) {
         return this.pageContainer.getRecordByRowID(rowID);
     }

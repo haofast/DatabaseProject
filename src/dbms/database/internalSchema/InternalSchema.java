@@ -8,9 +8,15 @@ import java.util.Map;
 
 public class InternalSchema {
 
-    public InternalSchema() throws IOException {
-        KryptonTables.initKryptonTablesTable();
-        KryptonColumns.initKryptonColumnsTable();
+    public static final InternalSchema globalInstance = new InternalSchema();
+
+    public InternalSchema() {
+        try {
+            KryptonTables.initKryptonTablesTable();
+            KryptonColumns.initKryptonColumnsTable();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /* procedure for creating a table and recording changes to disk */

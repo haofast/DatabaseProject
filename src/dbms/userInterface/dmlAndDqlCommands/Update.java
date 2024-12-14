@@ -1,5 +1,14 @@
 package dbms.userInterface.dmlAndDqlCommands;
 
+import dbms.database.internalSchema.InternalSchema;
+import dbms.database.table.page.Record;
+import dbms.database.table.Table;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class Update {
     // Class variables
     private String query;
@@ -51,6 +60,25 @@ public class Update {
 
             System.out.println("\nUpdate Column: " + this.columnName);
             System.out.println("\nUpdated Value " + this.value);
+
+
+            try {
+                // Get the table from internal schema
+                Table table = InternalSchema.globalInstance.getTable(this.tableName + ".tbl");
+                List<Record> records = table.searchRecordsByValue(this.columnName, this.value);
+
+                // create column_name -> value map
+                Map<String, String> valuePair = new HashMap<>();
+                valuePair.put(this.columnName, this.value);
+
+                // update all records matching where condition
+                for(Record r : records) { r.setValues(new HashMap<>(valuePair)); }
+                InternalSchema.globalInstance.saveTable(table);
+
+            } catch (IOException e) {
+                System.out.println("ERROR: unable to update record");
+                System.out.println(e);
+            }
         }
         else
             System.out.println("\nQuery is invalid!");

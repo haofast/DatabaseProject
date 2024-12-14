@@ -99,6 +99,10 @@ public class Record implements IBundleable<Record> {
         return this.cells.stream().filter(c -> c.getColumn().getName().equals(name)).findFirst().orElse(null);
     }
 
+    public List<String> getValues() {
+        return new ArrayList<>(this.cells.stream().map(ICell::getValue).toList()).subList(0, this.cells.size());
+    }
+
     public String getValueWithColumnName(String name) {
         return this.getCellWithName(name).getValue();
     }

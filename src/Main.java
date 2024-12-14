@@ -17,10 +17,11 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) throws Exception {
         //uncomment employeeCSVDemo for milestone 1 example
-        //employeeCSVDemo();
 
         //internalSchemaAndReadTableDemo();
         InternalSchema internalSchema = new InternalSchema();
+//        employeeCSVDemo();
+        System.out.println(internalSchema);
         //uncomment printInternalSchema for viewing internal schema at start
         //internalSchema.printInternalSchema();
 

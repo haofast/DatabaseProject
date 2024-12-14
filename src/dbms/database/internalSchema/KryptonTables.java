@@ -22,7 +22,11 @@ public class KryptonTables {
 
     public static void initKryptonTablesTable() throws IOException {
         kryptonTablesTable = initializeTableInMemory();
-        if (tableFileExistsOnDisk()) kryptonTablesTable.read();
+        if (tableFileExistsOnDisk()) {
+            kryptonTablesTable.read();
+        } else {
+            kryptonTablesTable.write();
+        };
     }
 
     protected static Table getKryptonTablesTable() {
@@ -36,7 +40,7 @@ public class KryptonTables {
     protected static Map<String, Table> getTables() throws IOException {
         Map<String, Table> tableMap = new TreeMap<>();
 
-        for (Record tableRecord : kryptonTablesTable.getRecords()) {
+        for (Record tableRecord : kryptonTablesTable.getRecordsUndeleted()) {
             int tableRowID = tableRecord.getRowIDValue();
             String tableName = tableRecord.getValueWithColumnName(TABLE_NAME);
             int lastUsedRowID = Integer.parseInt(tableRecord.getValueWithColumnName(RECORD_COUNT));
@@ -49,7 +53,7 @@ public class KryptonTables {
     }
 
     protected static Table getTable(String tableName) throws IOException {
-        Record tableRecord = kryptonTablesTable.searchRecordsByValueUndeleted(TABLE_NAME, tableName).getFirst();
+        Record tableRecord = kryptonTablesTable.searchRecordsByValueUndeleted(TABLE_NAME, tableName).get(0);
         int tableRowID = tableRecord.getRowIDValue();
         int lastUsedRowID = Integer.parseInt(tableRecord.getValueWithColumnName(RECORD_COUNT));
         Table table = new Table(tableName, KryptonColumns.getColumnBuildersForTable(tableRowID), lastUsedRowID);
@@ -59,7 +63,7 @@ public class KryptonTables {
 
     protected static void addTable(Table table) throws Exception {
         // can't create a table whose name is already taken
-        if (kryptonTablesTable.searchRecordsByValueUndeleted(TABLE_NAME, table.getName()) != null) {
+        if (!kryptonTablesTable.searchRecordsByValueUndeleted(TABLE_NAME, table.getName()).isEmpty()) {
             throw new Exception("ERROR: Unable to create table with name " + table.getName() + " because name is already taken. Operation aborted.");
         }
 
@@ -81,7 +85,7 @@ public class KryptonTables {
 
     private static Table initializeTableInMemory() {
         return new Table(TABLES_TABLE_NAME, new Column.Builder[]{
-            new Column.Builder(TABLE_NAME,   new StringType(20)),
+            new Column.Builder(TABLE_NAME,   new StringType(20)), //doc requirements plus .tbl extension
             new Column.Builder(RECORD_COUNT, new IntegerType())
         });
     }
