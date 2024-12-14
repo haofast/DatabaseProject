@@ -53,7 +53,7 @@ public class KryptonTables {
     }
 
     protected static Table getTable(String tableName) throws IOException {
-        Record tableRecord = kryptonTablesTable.searchRecordsByValueUndeleted(TABLE_NAME, tableName).getFirst();
+        Record tableRecord = kryptonTablesTable.searchRecordsByValueUndeleted(TABLE_NAME, tableName).get(0);
         int tableRowID = tableRecord.getRowIDValue();
         int lastUsedRowID = Integer.parseInt(tableRecord.getValueWithColumnName(RECORD_COUNT));
         Table table = new Table(tableName, KryptonColumns.getColumnBuildersForTable(tableRowID), lastUsedRowID);

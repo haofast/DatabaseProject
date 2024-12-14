@@ -20,7 +20,7 @@ public class Main {
 
         //internalSchemaAndReadTableDemo();
         InternalSchema internalSchema = new InternalSchema();
-        employeeCSVDemo();
+//        employeeCSVDemo();
         System.out.println(internalSchema);
         //uncomment printInternalSchema for viewing internal schema at start
         //internalSchema.printInternalSchema();

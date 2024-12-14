@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class AbstractCommand {
-    String result = "to be developed dun dun dunnn";
+    String result = "";
     String args;
     CommandType cmdType;
     CommandParser commandParser;
@@ -21,6 +21,7 @@ public class AbstractCommand {
 
         switch (cmdType) {
             case CommandType.SELECT -> new Select(inputtedCommand);
+            case CommandType.INSERT -> new Insert(inputtedCommand);
             case CommandType.CREATE_INDEX -> new IndexCommands(inputtedCommand);
             case CommandType.CREATE_TABLE -> new TableCommands(inputtedCommand);
             case CommandType.UPDATE -> new Update(inputtedCommand);
@@ -28,7 +29,7 @@ public class AbstractCommand {
         }
     }
 
-    public AbstractCommand(CommandType cmdType, String args){
+    public AbstractCommand(CommandType cmdType, String args) {
         this.args = args;
         this.cmdType = cmdType;
     }

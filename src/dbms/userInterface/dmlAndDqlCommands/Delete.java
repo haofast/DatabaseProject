@@ -42,6 +42,9 @@ public class Delete {
             String[] splitOnWhere = this.query.trim().split("(?i)WHERE");
             this.condition = splitOnWhere[1].trim();
             System.out.println("\nDelete Condition: " + this.condition);
+
+
+
         }
         else
             System.out.println("\nQuery is invalid!");

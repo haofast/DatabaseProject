@@ -36,9 +36,6 @@ public class CommandTypeParser extends CommandParser {
 
         } else if (arg.compareTo("UPDATE") == 0) {
             commandType = CommandType.UPDATE;
-
-        } else if (arg.compareTo("SELECT") == 0) {
-            commandType = CommandType.SELECT;
         }
 
         return commandType;
@@ -58,6 +55,9 @@ public class CommandTypeParser extends CommandParser {
 
         } else if (arg1.compareTo("DROP") + arg2.compareTo("INDEX") == 0) {
             commandType = CommandType.DROP_INDEX;
+
+        } else if (arg1.compareTo("SELECT") + arg2.compareTo("FROM") == 0) {
+            commandType = CommandType.SELECT;
         }
 
         return commandType;
