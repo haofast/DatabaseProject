@@ -2,6 +2,7 @@ package dbms.userInterface.dmlAndDqlCommands;
 
 import dbms.database.internalSchema.InternalSchema;
 import dbms.database.table.Table;
+import dbms.database.table.page.Criteria;
 import dbms.database.table.page.Record;
 
 import java.io.IOException;
@@ -68,36 +69,39 @@ public class Select {
                 this.columnList.add(col);
                 System.out.println(col);
             }
-            this.checkReturnAll();
 
             // From second part, get table name and condition
             String[] secondPartSplit = secondPart.trim().split("(?i)WHERE");
             this.tableName = secondPartSplit[0].trim();
-            try {
-                this.condition = secondPartSplit[1].trim();
-                hasCriteria = true;
-            } catch (Exception e) {
-                //handle where condition
+
+            // used to store search criteria
+            Criteria criteria = new Criteria();
+
+            // add criteria based on conditions
+            for (String condition : secondPartSplit[1].trim().split("(?i)AND")) {
+                String[] columnNameValue = condition.split("=");
+                criteria.add(columnNameValue[0].trim(), columnNameValue[1].trim());
             }
 
-            if (hasCriteria) {
+            // find the table
+            Table table = InternalSchema.globalInstance.getTable(this.tableName + ".tbl");
+            List<Record> records = table.getRecords();
+
+            // filter records by search criteria
+            List<Record> searchedRecords = table.searchRecordsByCriteria(criteria);
+
+            if (returnAll) {
+                // print records with no column filtration
+                for (Record r : searchedRecords) {
+                    System.out.println(r.getValues());
+                }
 
             } else {
-                InternalSchema schema = new InternalSchema();
-                Table table = schema.getTable(tableName+".tbl");
-
-                if(returnAll){
-                    System.out.println(table);
-                }
-                else{
-
+                // print records with columns filtered
+                for (Record r : searchedRecords) {
+                    System.out.println(r.getValuesWithColumnNames(List.of(listOfColumns)));
                 }
             }
         }
-    }
-
-    private void checkReturnAll() {
-        if (this.returnAll)
-            this.columnList = new ArrayList<String>();
     }
 }
