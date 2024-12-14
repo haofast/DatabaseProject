@@ -2,9 +2,14 @@ package dbms.userInterface.ddlCommands;
 
 import dbms.database.internalSchema.InternalSchema;
 import dbms.database.internalSchema.KryptonTables;
+import dbms.database.constants.ColumnFlag;
+import dbms.database.datatypes.IntegerType;
+import dbms.database.datatypes.ShortType;
+import dbms.database.datatypes.StringType;
 import dbms.database.table.Column;
 import dbms.database.table.Table;
 
+import java.io.IOException;
 import java.util.*;
 
 public class TableCommands {
@@ -15,7 +20,7 @@ public class TableCommands {
     private List<Table> tables;
 
     // Constructor
-    public TableCommands(String query) {
+    public TableCommands(String query) throws IOException {
         // Initiate
         this.query = query.trim();
         this.tableName = "";
@@ -36,7 +41,7 @@ public class TableCommands {
     }
 
     // Handle the query entered by user
-    private void handleQuery() {
+    private void handleQuery() throws IOException {
         // Split query and get first character for action
         String[] querySplit = this.query.trim().split("\\s+");
         String action = querySplit[0];
@@ -51,7 +56,10 @@ public class TableCommands {
 
         // Create a table
         else if (action.equalsIgnoreCase("CREATE")) {
-            if (querySplit.length >= 3) {
+            if (querySplit.length == 3) {
+                this.tableName = querySplit[2];
+                this.createTable(tableName + ".tbl");
+            } else if (querySplit.length > 3) {
                 this.tableName = querySplit[2];
 
                 // Get list of columns (and info) to put in table (split on open parentheses)
@@ -64,14 +72,18 @@ public class TableCommands {
 
                 // Get list of values (and info) to be inserted
                 String[] columnsInfo = columnsInfoStr.split(",");
-                for (String c: columnsInfo) {
+                for (String c : columnsInfo) {
                     c = c.trim();
                     this.columnInfoList.add(c);
                 }
 
+                if (columnInfoList.isEmpty()) {
+                    this.createTable(tableName + ".tbl");
+                }else {
+                    this.createTable(tableName + ".tbl", columnInfoList);
+                }
 
-            }
-            else {
+            } else {
                 System.out.println("\nQuery is invalid!");
             }
         }
@@ -88,8 +100,9 @@ public class TableCommands {
         }
 
         // Invalid
-        else
+        else {
             System.out.println("\nQuery is invalid!");
+        }
     }
 
     // Will add code to show all tables (returned blank Table list as placeholder)
@@ -101,10 +114,20 @@ public class TableCommands {
         }
     }
 
+
     // Will add code to create a table (returned blank Table as placeholder)
-    private Table createTable(String tableName, String columnInfo) {
+    private Table createTable(String tableName) throws IOException {
         Column.Builder[] columnBuilders = {};
-        return new Table(tableName, columnBuilders);
+        Table newTable = new Table(tableName, columnBuilders);
+        newTable.write();
+        return newTable;
+    }
+    // Will add code to create a table (returned blank Table as placeholder)
+    private Table createTable(String tableName, List<String> columnInfo) throws IOException {
+        Column.Builder[] columnBuilders = {};
+        Table newTable = new Table(tableName, columnBuilders);
+        newTable.write();
+        return newTable;
     }
 
     // Will add code to drop a table (returned blank Table as a placeholder)
