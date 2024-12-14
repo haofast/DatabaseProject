@@ -10,6 +10,8 @@ import dbms.database.table.Table;
 import java.io.IOException;
 import java.util.*;
 
+import static dbms.database.internalSchema.InternalSchema.globalInstance;
+
 public class TableCommands {
     // Class variables
     private String query;
@@ -104,19 +106,16 @@ public class TableCommands {
     }
 
     // Will add code to show all tables (returned blank Table list as placeholder)
-    private void showTables() {
-        this.tables = new ArrayList<Table>();
-
-        for (Table tbl: this.tables) {
-            System.out.println(tbl.toString());
-        }
+    private void showTables() throws IOException {
+        Map<String, Table> tables = InternalSchema.globalInstance.getTables();
+        tables.values().forEach(value -> System.out.println(value));
     }
 
 
     // Will add code to create a table (returned blank Table as placeholder)
     private Table createTable(String tableName) throws Exception {
         Column.Builder[] columnBuilders = {};
-        Table newTable = InternalSchema.globalInstance.createTable(tableName, columnBuilders);
+        Table newTable = globalInstance.createTable(tableName, columnBuilders);
         return newTable;
     }
     // Will add code to create a table (returned blank Table as placeholder)
@@ -164,14 +163,14 @@ public class TableCommands {
         Column.Builder[] columnBuilders = builders.toArray(new Column.Builder[0]);
 
 
-        Table newTable = InternalSchema.globalInstance.createTable(tableName, columnBuilders);
+        Table newTable = globalInstance.createTable(tableName, columnBuilders);
         return newTable;
     }
 
     // Will add code to drop a table (returned blank Table as a placeholder)
     private void dropTable(String tableName) {
         try {
-            InternalSchema.globalInstance.dropTable(tableName + ".tbl");
+            globalInstance.dropTable(tableName + ".tbl");
         } catch (Exception e) {
             System.out.println("ERROR: unable to drop table");
             System.out.println(e);

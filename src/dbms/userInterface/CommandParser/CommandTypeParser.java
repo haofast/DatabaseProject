@@ -25,10 +25,7 @@ public class CommandTypeParser extends CommandParser {
     static CommandType getCommandTypeEnum(String arg) {
         CommandType commandType = CommandType.INVALID;
 
-        if (arg.compareTo("SHOW") == 0) {
-            commandType = CommandType.SHOW_TABLE;
-
-        } else if (arg.compareTo("INSERT") == 0) {
+        if (arg.compareTo("INSERT") == 0) {
             commandType = CommandType.INSERT;
 
         } else if (arg.compareTo("DELETE") == 0) {
@@ -58,6 +55,9 @@ public class CommandTypeParser extends CommandParser {
 
         } else if (arg1.compareTo("SELECT") + arg2.compareTo("FROM") == 0) {
             commandType = CommandType.SELECT;
+
+        } else if (arg1.compareTo("SHOW") + arg2.compareTo("TABLES") == 0) {
+            commandType = CommandType.SHOW_TABLE;
         }
 
         return commandType;

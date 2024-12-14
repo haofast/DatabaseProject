@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class CommandParser {
-    public static final String[] keyWords = {"EXIT", "SHOW", "CREATE", "TABLE", "INDEX", "DROP", "DELETE", "UPDATE", "SELECT", "WHERE", "IN", "VALUES", "SET", "UNIQUE", "FROM",};
+    public static final String[] keyWords = {"EXIT", "SHOW", "CREATE", "TABLE", "TABLES", "INDEX", "DROP", "DELETE", "UPDATE", "SELECT", "WHERE", "IN", "VALUES", "SET", "UNIQUE", "FROM",};
     static List<String> inputtedCommand;
 
     public CommandParser() {}

@@ -21,6 +21,7 @@ public class AbstractCommand {
 
         switch (cmdType) {
             case CommandType.SELECT -> new Select(inputtedCommand);
+            case CommandType.SHOW_TABLE -> new TableCommands(inputtedCommand);
             case CommandType.INSERT -> new Insert(inputtedCommand);
             case CommandType.CREATE_INDEX -> new IndexCommands(inputtedCommand);
             case CommandType.CREATE_TABLE -> new TableCommands(inputtedCommand);
