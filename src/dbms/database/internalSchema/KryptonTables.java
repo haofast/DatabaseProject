@@ -40,7 +40,7 @@ public class KryptonTables {
     protected static Map<String, Table> getTables() throws IOException {
         Map<String, Table> tableMap = new TreeMap<>();
 
-        for (Record tableRecord : kryptonTablesTable.getRecords()) {
+        for (Record tableRecord : kryptonTablesTable.getRecordsUndeleted()) {
             int tableRowID = tableRecord.getRowIDValue();
             String tableName = tableRecord.getValueWithColumnName(TABLE_NAME);
             int lastUsedRowID = Integer.parseInt(tableRecord.getValueWithColumnName(RECORD_COUNT));

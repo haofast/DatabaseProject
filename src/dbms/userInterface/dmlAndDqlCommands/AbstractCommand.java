@@ -25,6 +25,7 @@ public class AbstractCommand {
             case CommandType.INSERT -> new Insert(inputtedCommand);
             case CommandType.CREATE_INDEX -> new IndexCommands(inputtedCommand);
             case CommandType.CREATE_TABLE -> new TableCommands(inputtedCommand);
+            case CommandType.DROP_TABLE -> new TableCommands(inputtedCommand);
             case CommandType.UPDATE -> new Update(inputtedCommand);
             case CommandType.DELETE -> new Delete(inputtedCommand);
         }

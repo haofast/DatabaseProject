@@ -4,6 +4,7 @@ import dbms.database.internalSchema.InternalSchema;
 import dbms.database.table.Table;
 import dbms.database.table.page.Criteria;
 import dbms.database.table.page.Record;
+import dbms.userInterface.CommandParser.WhereClause;
 
 import java.io.IOException;
 import java.util.*;
@@ -78,7 +79,7 @@ public class Select {
 
 
             if (secondPartSplit.length > 1) {
-//                handleWhereClause(secondPartSplit[1], listOfColumns);
+                handleWhereClause(secondPartSplit[1], listOfColumns);
             } else {
 
                 // find the table
@@ -100,36 +101,28 @@ public class Select {
             }
         }
     }
-//
-//    private void handleWhereClause(String whereConditions, String[] listOfColumns) throws IOException {
-//
-//        // used to store search criteria
-//        Criteria criteria = new Criteria();
-//
-//        // add criteria based on conditions
-//        for (String condition : secondPartSplit[1].trim().split("(?i)AND")) {
-//            String[] columnNameValue = condition.split("=");
-//            criteria.add(columnNameValue[0].trim(), columnNameValue[1].trim());
-//        }
-//
-//        // find the table
-//        Table table = InternalSchema.globalInstance.getTable(this.tableName + ".tbl");
-//        List<Record> records = table.getRecords();
-//
-//        // filter records by search criteria
-//        List<Record> searchedRecords = table.searchRecordsByCriteria(criteria);
-//
-//        if (returnAll) {
-//            // print records with no column filtration
-//            for (Record r : searchedRecords) {
-//                System.out.println(r.getValues());
-//            }
-//
-//        } else {
-//            // print records with columns filtered
-//            for (Record r : searchedRecords) {
-//                System.out.println(r.getValuesWithColumnNames(List.of(listOfColumns)));
-//            }
-//        }
-//    }
+
+    private void handleWhereClause(String whereConditions, String[] listOfColumns) throws IOException {
+
+        // used to store search criteria
+        Criteria criteria = new Criteria();
+
+        // find the table
+        Table table = InternalSchema.globalInstance.getTable(this.tableName + ".tbl");
+
+
+        List<Record> records = WhereClause.processWhere(table, whereConditions);
+
+        if (returnAll) {
+            // print records with no column filtration
+            for (Record r : records) {
+                System.out.println(r.getValues());
+            }
+        } else {
+            // print records with columns filtered
+            for (Record r : records) {
+                System.out.println(r.getValuesWithColumnNames(List.of(listOfColumns)));
+            }
+        }
+    }
 }
